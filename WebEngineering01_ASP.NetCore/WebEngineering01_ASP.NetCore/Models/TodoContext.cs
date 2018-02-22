@@ -13,7 +13,15 @@ namespace WebEngineering01_ASP.NetCore.Models
         {
         }
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItem> TodoItem { get; set; }
+        public DbSet<TodoList> TodoList { get; set; }
+        public DbSet<User> User { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TodoItem>().ToTable("TodoItem");
+            modelBuilder.Entity<TodoList>().ToTable("TodoList");
+            modelBuilder.Entity<User>().ToTable("User");
+        }
     }
 }

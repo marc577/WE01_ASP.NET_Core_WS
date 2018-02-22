@@ -7,21 +7,20 @@ using System.Threading.Tasks;
 
 namespace WebEngineering01_ASP.NetCore.Models
 {
-    public class TodoItem
+    public class User
     {
         public long Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
-
-        [DefaultValue(false)]
-        public bool IsComplete { get; set; }
+        public string LastName { get; set; }
 
         [Required]
-        public TodoList List { get; set; }
+        public string SurName { get; set; }
 
-        [DefaultValue(null)]
-        public DateTime Until { get; set; }
+        [Required]
+        public string MailAdress { get; set; }
 
+        [Required]
+        public string Password { get; set; }
     }
 }

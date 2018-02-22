@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,8 +28,11 @@ namespace WebEngineering01_ASP.NetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
+
+            services.AddDbContext<TodoContext>(options =>
+            options.UseSqlite("Data Source=TodoList.db"));
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -39,6 +44,11 @@ namespace WebEngineering01_ASP.NetCore
                     TermsOfService = "None",
                     Contact = new Contact { Name = "Abel, Daniel / Krieg, Alexander / Reinke, Marc / Reus, Theresa", Email = "mar.reinke.16@lehre.mosbach.dhbw.de", Url = "mailto://mar.reinke.16@lehre.mosbach.dhbw.de" },
                 });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var basePath = AppContext.BaseDirectory;
+                var xmlPath = Path.Combine(basePath, "WebEngineering01_ASP.NetCore.xml");
+                c.IncludeXmlComments(xmlPath);
             });
 
         }
