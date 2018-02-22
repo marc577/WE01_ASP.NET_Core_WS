@@ -29,12 +29,23 @@ namespace TodoApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns all User.
+        /// </summary>
+        /// <returns>All Users</returns>
+        /// <response code="200">Returns all items</response>
         [HttpGet]
         public IEnumerable<User> GetAll()
         {
             return _context.User.ToList();
         }
 
+        /// <summary>
+        /// Returns a User.
+        /// </summary>
+        /// <returns>A User</returns>
+        /// <response code="200">Returns an items</response>
+        /// <response code="404">If the id is not found</response>
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult GetById(long id)
         {
@@ -47,21 +58,23 @@ namespace TodoApi.Controllers
         }
 
         /// <summary>
-        /// Creates a TodoItem.
+        /// Creates a User.
         /// </summary>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /Todo
+        ///     POST /User
         ///     {
         ///        "id": 1,
-        ///        "name": "Item1",
-        ///        "isComplete": true
+        ///        "lastName": "Last",
+        ///        "surName": "First",
+        ///        "mailAdress" : "first@last.tld",
+        ///        "password" : "SafePass"
         ///     }
         ///
         /// </remarks>
         /// <param name="item"></param>
-        /// <returns>A newly-created TodoItem</returns>
+        /// <returns>A newly-created User</returns>
         /// <response code="201">Returns the newly-created item</response>
         /// <response code="400">If the item is null</response> 
         [HttpPost]
@@ -80,6 +93,26 @@ namespace TodoApi.Controllers
             return CreatedAtRoute("GetUser", new { id = item.Id }, item);
         }
 
+        /// <summary>
+        /// Updates a User.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /User
+        ///     {
+        ///        "id": 1,
+        ///        "lastName": "Last",
+        ///        "surName": "First",
+        ///        "mailAdress" : "first@last.tld",
+        ///        "password" : "SafePass"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <response code="400">If the item is null</response>
+        /// <response code="404">If the id is not found</response>
         [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody] User item)
         {
@@ -107,7 +140,8 @@ namespace TodoApi.Controllers
         /// <summary>
         /// Deletes a specific TodoItem.
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="id"></param>
+        /// <response code="400">If the item is null</response>
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {

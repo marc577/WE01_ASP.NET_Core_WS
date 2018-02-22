@@ -39,15 +39,15 @@ namespace WebEngineering01_ASP.NetCore
                 c.SwaggerDoc("v1", new Info
                 {
                     Version = "v1",
-                    Title = "Web Engineering 01 ASP.NET Core Example API",
-                    Description = "Web Engineering 01 ASP.NET Core Example API",
+                    Title = "Collaborated ToDoList Backend",
+                    Description = "ASP.Net Core Webservice",
                     TermsOfService = "None",
                     Contact = new Contact { Name = "Abel, Daniel / Krieg, Alexander / Reinke, Marc / Reus, Theresa", Email = "mar.reinke.16@lehre.mosbach.dhbw.de", Url = "mailto://mar.reinke.16@lehre.mosbach.dhbw.de" },
                 });
 
                 // Set the comments path for the Swagger JSON and UI.
                 var basePath = AppContext.BaseDirectory;
-                var xmlPath = Path.Combine(basePath, "WebEngineering01_ASP.NetCore.xml");
+                var xmlPath = Path.Combine(basePath, "CollabTodoListBackend.xml");
                 c.IncludeXmlComments(xmlPath);
             });
 
