@@ -28,7 +28,6 @@ namespace WebEngineering01_ASP.NetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
 
             services.AddDbContext<TodoContext>(options =>
@@ -67,7 +66,7 @@ namespace WebEngineering01_ASP.NetCore
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web Engineering 01 ASP.NET Core Example API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CollabTodoList Backend ASP.Net Core Webservice");
             });
 
 
