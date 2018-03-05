@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WebEngineering01_ASP.NetCore.Migrations
+namespace CollabTodoListBackend.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -30,10 +30,10 @@ namespace WebEngineering01_ASP.NetCore.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     MailAdress = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
-                    SurName = table.Column<string>(nullable: false),
                     TodoListId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

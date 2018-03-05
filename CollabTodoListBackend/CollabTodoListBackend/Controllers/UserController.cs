@@ -20,7 +20,7 @@ namespace TodoApi.Controllers
                 _context.User.Add(new User
                 {
                     LastName = "Admin",
-                    SurName = "Sys",
+                    FirstName = "Sys",
                     MailAdress = "sys@admin.de",
                     Password = "123456"
 
@@ -67,7 +67,7 @@ namespace TodoApi.Controllers
         ///     {
         ///        "id": 1,
         ///        "lastName": "Last",
-        ///        "surName": "First",
+        ///        "firstName": "First",
         ///        "mailAdress" : "first@last.tld",
         ///        "password" : "SafePass"
         ///     }
@@ -103,7 +103,7 @@ namespace TodoApi.Controllers
         ///     {
         ///        "id": 1,
         ///        "lastName": "Last",
-        ///        "surName": "First",
+        ///        "FirstName": "First",
         ///        "mailAdress" : "first@last.tld",
         ///        "password" : "SafePass"
         ///     }
@@ -129,7 +129,7 @@ namespace TodoApi.Controllers
 
             user.LastName = item.LastName;
             user.MailAdress = item.MailAdress;
-            user.SurName = item.Password;
+            user.FirstName = item.FirstName;
             user.Password = item.Password;
 
             _context.User.Update(user);

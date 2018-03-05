@@ -30,7 +30,7 @@ namespace WebEngineering01_ASP.NetCore.Models
                              Owner = new User
                              {
                                  LastName = "Admin",
-                                 SurName = "Sys",
+                                 FirstName = "Sys",
                                  MailAdress = "sys@admin.de",
                                  Password = "123456"
                              }

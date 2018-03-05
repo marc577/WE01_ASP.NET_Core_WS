@@ -15,7 +15,7 @@ namespace WebEngineering01_ASP.NetCore.Models
         public string LastName { get; set; }
 
         [Required]
-        public string SurName { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         public string MailAdress { get; set; }

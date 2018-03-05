@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using WebEngineering01_ASP.NetCore.Models;
 
-namespace WebEngineering01_ASP.NetCore.Migrations
+namespace CollabTodoListBackend.Migrations
 {
     [DbContext(typeof(TodoContext))]
     partial class TodoContextModelSnapshot : ModelSnapshot
@@ -62,6 +62,9 @@ namespace WebEngineering01_ASP.NetCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
                     b.Property<string>("LastName")
                         .IsRequired();
 
@@ -69,9 +72,6 @@ namespace WebEngineering01_ASP.NetCore.Migrations
                         .IsRequired();
 
                     b.Property<string>("Password")
-                        .IsRequired();
-
-                    b.Property<string>("SurName")
                         .IsRequired();
 
                     b.Property<long?>("TodoListId");

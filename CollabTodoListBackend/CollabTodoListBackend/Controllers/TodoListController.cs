@@ -22,7 +22,7 @@ namespace TodoApi.Controllers
                    Owner = new User
                    {
                        LastName = "Admin",
-                       SurName = "Sys",
+                       FirstName = "Sys",
                        MailAdress = "sys@admin.de",
                        Password = "123456"
                    }
@@ -41,6 +41,7 @@ namespace TodoApi.Controllers
         {
             return _context.TodoList.ToList();
         }
+
 
         /// <summary>
         /// Returns a TodoList.
