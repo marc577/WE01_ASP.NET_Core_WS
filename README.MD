@@ -5,6 +5,7 @@ How to generate SQLite DB in Backend Service:
 4. dotnet ef database update
 
 Services (WebEngineering01_ASP.NetCore)
+/api/todocollab
 /api/todoitem
 /api/todolist
 /api/user
