@@ -73,6 +73,7 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
+            item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
             return new ObjectResult(item);
         }
 
@@ -103,7 +104,11 @@ namespace TodoApi.Controllers
             {
                 return BadRequest();
             }
-
+            if(item.Owner == null)
+            {
+                item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
+            }
+            item.TodoItems = new List<TodoItem>();
             _context.TodoList.Add(item);
             _context.SaveChanges();
 

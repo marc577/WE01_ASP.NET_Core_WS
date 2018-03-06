@@ -11,7 +11,7 @@ using WebEngineering01_ASP.NetCore.Models;
 namespace CollabTodoListBackend.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20180306094013_InitialCreate")]
+    [Migration("20180306143308_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

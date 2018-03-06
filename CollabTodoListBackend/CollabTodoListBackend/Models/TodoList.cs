@@ -23,11 +23,11 @@ namespace WebEngineering01_ASP.NetCore.Models
         public User Owner { get; set; }
 
 
-        [DefaultValue(null)]
-        public ICollection<TodoItem> TodoItems { get; set; }
+        //[DefaultValue(List<TodoItem>)]
+        public List<TodoItem> TodoItems { get; set; }
         
 
-        [DefaultValue(null)]
+        //[DefaultValue(null)]
         public ICollection<TodoListUser> Collaborators { get; set; }
     }
 }
