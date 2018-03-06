@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,13 +10,18 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class TodoItem
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
         [DefaultValue(false)]
         public bool IsComplete { get; set; }
+
+        [Required]
+        [ForeignKey("List")]
+        public Guid ListID { get; set; }
+
 
         [Required]
         public TodoList List { get; set; }

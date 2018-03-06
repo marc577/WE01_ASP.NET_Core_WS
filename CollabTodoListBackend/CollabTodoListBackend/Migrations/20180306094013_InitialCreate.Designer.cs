@@ -11,7 +11,7 @@ using WebEngineering01_ASP.NetCore.Models;
 namespace CollabTodoListBackend.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20180305115524_InitialCreate")]
+    [Migration("20180306094013_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,12 +22,12 @@ namespace CollabTodoListBackend.Migrations
 
             modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("IsComplete");
 
-                    b.Property<long>("ListId");
+                    b.Property<Guid>("ListID");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -36,31 +36,44 @@ namespace CollabTodoListBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListId");
+                    b.HasIndex("ListID");
 
                     b.ToTable("TodoItem");
                 });
 
             modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoList", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<long>("OwnerId");
+                    b.Property<Guid>("OwnerID");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("TodoList");
                 });
 
+            modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoListUser", b =>
+                {
+                    b.Property<Guid>("CollaboratorID");
+
+                    b.Property<Guid>("TodoListID");
+
+                    b.HasKey("CollaboratorID", "TodoListID");
+
+                    b.HasIndex("TodoListID");
+
+                    b.ToTable("TodoListUser");
+                });
+
             modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("FirstName")
@@ -75,11 +88,7 @@ namespace CollabTodoListBackend.Migrations
                     b.Property<string>("Password")
                         .IsRequired();
 
-                    b.Property<long?>("TodoListId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TodoListId");
 
                     b.ToTable("User");
                 });
@@ -88,7 +97,7 @@ namespace CollabTodoListBackend.Migrations
                 {
                     b.HasOne("WebEngineering01_ASP.NetCore.Models.TodoList", "List")
                         .WithMany("TodoItems")
-                        .HasForeignKey("ListId")
+                        .HasForeignKey("ListID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -96,15 +105,21 @@ namespace CollabTodoListBackend.Migrations
                 {
                     b.HasOne("WebEngineering01_ASP.NetCore.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
+                        .HasForeignKey("OwnerID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.User", b =>
+            modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoListUser", b =>
                 {
-                    b.HasOne("WebEngineering01_ASP.NetCore.Models.TodoList")
+                    b.HasOne("WebEngineering01_ASP.NetCore.Models.User", "Collaborator")
+                        .WithMany("Lists")
+                        .HasForeignKey("CollaboratorID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebEngineering01_ASP.NetCore.Models.TodoList", "Todolist")
                         .WithMany("Collaborators")
-                        .HasForeignKey("TodoListId");
+                        .HasForeignKey("TodoListID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

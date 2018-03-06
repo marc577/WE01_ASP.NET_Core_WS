@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
+using System;
 
 namespace TodoApi.Controllers
 {
@@ -15,19 +16,34 @@ namespace TodoApi.Controllers
         {
             _context = context;
 
-            if (_context.TodoList.Count() == 0)
+            if (_context.TodoItem.Count() == 0)
             {
-               _context.TodoList.Add(new TodoList {
-                   Name = "List1",
-                   Owner = new User
-                   {
-                       LastName = "Admin",
-                       FirstName = "Sys",
-                       MailAdress = "sys@admin.de",
-                       Password = "123456"
-                   }
-               });
-               _context.SaveChanges();
+                List<User> collaborators = new List<User>();
+                collaborators.Add(new User
+                {
+                    LastName = "Collab",
+                    FirstName = "User",
+                    MailAdress = "col@lab.de",
+                    Password = "12345"
+                });
+
+                _context.TodoItem.Add(new TodoItem
+                {
+                    Name = "Do Stuff",
+                    List = new TodoList
+                    {
+                        Name = "Stuff",
+                        Owner = new User
+                        {
+                            LastName = "Admin",
+                            FirstName = "Sys",
+                            MailAdress = "sys@admin.de",
+                            Password = "123456"
+                        },
+                        //Collaborators = collaborators
+                    }
+                });
+                _context.SaveChanges();
             }
         }
 
@@ -50,9 +66,9 @@ namespace TodoApi.Controllers
         /// <response code="200">Returns an items</response>
         /// <response code="404">If the id is not found</response>
         [HttpGet("{id}", Name = "GetTodoList")]
-        public IActionResult GetById(long id)
+        public IActionResult GetById(Guid id)
         {
-            var item = _context.TodoList.FirstOrDefault(t => t.Id == id);
+            var item = _context.TodoList.FirstOrDefault(t => t.Id.Equals(id));
             if (item == null)
             {
                 return NotFound();
@@ -113,14 +129,14 @@ namespace TodoApi.Controllers
         /// <response code="400">If the item is null</response>
         /// <response code="404">If the id is not found</response>
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] TodoList item)
+        public IActionResult Update(Guid id, [FromBody] TodoList item)
         {
-            if (item == null || item.Id != id)
+            if (item == null || !item.Id.Equals(id))
             {
                 return BadRequest();
             }
 
-            var todoList = _context.TodoList.FirstOrDefault(t => t.Id == id);
+            var todoList = _context.TodoList.FirstOrDefault(t => t.Id.Equals(id));
             if (todoList == null)
             {
                 return NotFound();
@@ -142,9 +158,9 @@ namespace TodoApi.Controllers
         /// <param name="id"></param>
         /// <response code="404">If the id is not found</response>
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(Guid id)
         {
-            var todoList = _context.TodoList.FirstOrDefault(t => t.Id == id);
+            var todoList = _context.TodoList.FirstOrDefault(t => t.Id.Equals(id));
             if (todoList == null)
             {
                 return NotFound();

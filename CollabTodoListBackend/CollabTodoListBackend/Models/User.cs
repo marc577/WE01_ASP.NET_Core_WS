@@ -9,7 +9,7 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class User
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string LastName { get; set; }
@@ -22,5 +22,7 @@ namespace WebEngineering01_ASP.NetCore.Models
 
         [Required]
         public string Password { get; set; }
+
+        public ICollection<TodoListUser> Lists { get; set; }
     }
 }
