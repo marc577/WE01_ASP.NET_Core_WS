@@ -43,7 +43,7 @@ namespace CollabTodoListBackend.Controllers
                     List = new TodoList
                     {
                         Name = "Stuff",
-                        Owner = _context.User.FirstOrDefault(e=> e.FirstName.Equals("Sys")),
+                        //Owner = _context.User.FirstOrDefault(e=> e.FirstName.Equals("Sys")),
                         //Collaborators = collaborators
                     }
                 });
@@ -72,7 +72,7 @@ namespace CollabTodoListBackend.Controllers
 
             foreach (TodoList list in allLists)
             {
-                if (list.Owner.Id.Equals(id))
+                /*if (list.Owner.Id.Equals(id))
                 {
                     result.Add(list);
                 }
@@ -82,7 +82,7 @@ namespace CollabTodoListBackend.Controllers
                     {
                         //if (collaborator.Id.Equals(id)) result.Add(list);
                     }
-                }
+                }*/
             }
             return _context.TodoList.ToList();
         }

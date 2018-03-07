@@ -10,24 +10,32 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class TodoList
     {
-        public Guid Id { get; set; }
+
+        public TodoList()
+        {
+            TodoItems = new List<TodoItem>();
+            Collaborators = new List<TodoListUser>();
+        }
+        
+
+        public virtual Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [Required]
         [ForeignKey("Owner")]
-        public Guid OwnerID { get; set; }
+        public virtual Guid OwnerID { get; set; }
 
-        [Required]
-        public User Owner { get; set; }
+        //[Required]
+        //public virtual  User Owner { get; set; }
 
 
         //[DefaultValue(List<TodoItem>)]
-        public List<TodoItem> TodoItems { get; set; }
-        
+        public virtual ICollection<TodoItem> TodoItems { get; set; }
+
 
         //[DefaultValue(null)]
-        public ICollection<TodoListUser> Collaborators { get; set; }
+        public virtual ICollection<TodoListUser> Collaborators { get; set; }
     }
 }

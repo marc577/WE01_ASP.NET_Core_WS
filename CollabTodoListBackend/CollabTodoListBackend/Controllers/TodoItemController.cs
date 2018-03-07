@@ -32,14 +32,14 @@ namespace TodoApi.Controllers
                     Name = "Do Stuff",
                     List = new TodoList
                     {
-                        Name = "Stuff",
-                        Owner = new User
+                        Name = "Stuff"
+                        /*Owner = new User
                         {
                             LastName = "Admin",
                             FirstName = "Sys",
                             MailAdress = "sys@admin.de",
                             Password = "123456"
-                        },
+                        },*/
                         //Collaborators = collaborators              
                    }
                });
@@ -106,6 +106,8 @@ namespace TodoApi.Controllers
             }
 
             _context.TodoItem.Add(item);
+            var list = _context.TodoList.FirstOrDefault(e => e.Id.Equals(item.ListID));
+            list.TodoItems.Add(item);
             _context.SaveChanges();
 
             return CreatedAtRoute("GetTodoItem", new { id = item.Id }, item);

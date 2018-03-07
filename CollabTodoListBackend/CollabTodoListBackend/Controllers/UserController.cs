@@ -32,14 +32,14 @@ namespace TodoApi.Controllers
                     Name = "Do Stuff",
                     List = new TodoList
                     {
-                        Name = "Stuff",
-                        Owner = new User
+                        Name = "Stuff"
+                        /*Owner = new User
                         {
                             LastName = "Admin",
                             FirstName = "Sys",
                             MailAdress = "sys@admin.de",
                             Password = "123456"
-                        },
+                        },*/
                         //Collaborators = collaborators
                     }
                 });

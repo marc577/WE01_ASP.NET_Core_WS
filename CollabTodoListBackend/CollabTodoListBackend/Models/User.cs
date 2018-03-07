@@ -9,20 +9,20 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public virtual string LastName { get; set; }
 
         [Required]
-        public string FirstName { get; set; }
+        public virtual string FirstName { get; set; }
 
         [Required]
-        public string MailAdress { get; set; }
+        public virtual string MailAdress { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public virtual string Password { get; set; }
 
-        public ICollection<TodoListUser> Lists { get; set; }
+        public virtual ICollection<TodoListUser> Lists { get; set; }
     }
 }
