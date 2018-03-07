@@ -28,10 +28,12 @@ namespace WebEngineering01_ASP.NetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(
+            options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddDbContext<TodoContext>(options =>
-            options.UseSqlite("Data Source=TodoList.db"));
+                options.UseLazyLoadingProxies().UseSqlite("Data Source=TodoList.db"));
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
             {

@@ -32,14 +32,14 @@ namespace TodoApi.Controllers
                     Name = "Do Stuff",
                     List = new TodoList
                     {
-                        Name = "Stuff",
-                        Owner = new User
+                        Name = "Stuff"
+                        /*Owner = new User
                         {
                             LastName = "Admin",
                             FirstName = "Sys",
                             MailAdress = "sys@admin.de",
                             Password = "123456"
-                        },
+                        },*/
                         //Collaborators = collaborators
                     }
                 });
@@ -73,7 +73,7 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-            item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
+            //item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
             return new ObjectResult(item);
         }
 
@@ -104,11 +104,10 @@ namespace TodoApi.Controllers
             {
                 return BadRequest();
             }
-            if(item.Owner == null)
+            /*if(item.Owner == null)
             {
                 item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
-            }
-            item.TodoItems = new List<TodoItem>();
+            }*/
             _context.TodoList.Add(item);
             _context.SaveChanges();
 
@@ -148,7 +147,7 @@ namespace TodoApi.Controllers
             }
 
             todoList.Name = item.Name;
-            todoList.Owner = item.Owner;
+            //todoList.Owner = item.Owner;
             todoList.TodoItems = item.TodoItems;
             todoList.Collaborators = item.Collaborators;
 

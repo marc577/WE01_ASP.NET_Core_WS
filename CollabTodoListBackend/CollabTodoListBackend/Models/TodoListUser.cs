@@ -16,12 +16,12 @@ namespace WebEngineering01_ASP.NetCore.Models
         public Guid CollaboratorID { get; set; }
 
         [Required]
-        public User Collaborator { get; set; }
+        public virtual User Collaborator { get; set; }
 
         [Required]
         [ForeignKey("Todolist")]
         public Guid TodoListID { get; set; }
 
         [Required]
-        public TodoList Todolist { get; set; }}
+        public virtual TodoList Todolist { get; set; }}
 }

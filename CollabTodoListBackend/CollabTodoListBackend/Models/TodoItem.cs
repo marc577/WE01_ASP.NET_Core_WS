@@ -10,24 +10,24 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class TodoItem
     {
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [DefaultValue(false)]
-        public bool IsComplete { get; set; }
+        public virtual bool IsComplete { get; set; }
 
         [Required]
         [ForeignKey("List")]
-        public Guid ListID { get; set; }
+        public virtual Guid ListID { get; set; }
 
 
         [Required]
-        public TodoList List { get; set; }
+        public virtual TodoList List { get; set; }
 
         [DefaultValue(null)]
-        public DateTime Until { get; set; }
+        public virtual DateTime Until { get; set; }
 
     }
 }
