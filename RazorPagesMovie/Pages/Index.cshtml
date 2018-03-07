@@ -6,7 +6,7 @@
 
 <div class="row">
 
-    <p>Lists for User</p>
+    </br>
 
     @foreach (var todoList in Model.todolistList)
     {
@@ -29,124 +29,112 @@
             </div>
         </div>
         <div class="panel-body">
-            <div class="panel-group" id="accordion_@todoList.Id">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_@todoList.Id" href="#collapseOne_@todoList.Id">
-                        Show incomplete Entries
-                        </a>
-                    </h4>
-                    </div>
-                    <div id="collapseOne_@todoList.Id" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                        <thead>
-                                            <th>Name</th>
-                                            <th>Due Date</th>
-                                            <th></th>
-                                        </thead>
-                                        <tbody>
-                                @foreach (var todoItem in Model.todoItemList)
-                                {
-                                    if (todoItem.IsComplete == false)
-                                    {
-                                    <tr>
-                                        <td>@todoItem.Name</td>
-                                        <td>@todoItem.Until</td>
-                                        <td class="text-right">
-                                            <button type="submit" class="btn btn-default" asp-page-handler="test">
-                                                <span class="glyphicon glyphicon-ok"></span>
-                                            </button>
-                                            <button type="submit" class="btn btn-default" asp-page-handler="pencil">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button type="submit" class="btn btn-default" asp-page-handler="pencil">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    } 
-                                }
-                                </tbody>
-                            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Show incomplete Entries
+                        </h4>
                         </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_@todoList.Id" href="#collapseTwo_@todoList.Id">
-                        Show complete Entries
-                        </a>
-                    </h4>
-                    </div>
-                    <div id="collapseTwo_@todoList.Id" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <th>Name</th>
-                                    <th>Due Date</th>
-                                    <th></th>
-                                </thead>
-                                <tbody>
-                                @foreach (var todoItem in Model.todoItemList)
-                                { 
-                                    if (todoItem.IsComplete == true)
+                        <div  >
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                            <thead>
+                                                <th>Name</th>
+                                                <th>Due Date</th>
+                                                <th></th>
+                                            </thead>
+                                            <tbody>
+
+                                        <tr>
+                                            <td><input type="text" class="form-control" /></td>
+                                            <td><input type="date" class="form-control" /></td>
+                                            <td class="text-right">
+                                                <button type="submit" class="btn btn-default" asp-page-handler="test">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @foreach (var todoItem in Model.todoItemList)
                                     {
-                                    <tr>
-                                        <td>@todoItem.Name</td>
-                                        <td>@todoItem.Until</td>
-                                        <td class="text-right">
-                                            <button type="submit" class="btn btn-default" asp-page-handler="test">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            
-                                            <button type="submit" class="btn btn-default" asp-page-handler="test">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                        if (todoItem.IsComplete == false)
+                                        {
+                                        <tr>
+                                            <td>@todoItem.Name</td>
+                                            <td>@todoItem.Until</td>
+                                            <td class="text-right">
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="test">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="pencil">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </button>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="pencil">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        } 
                                     }
-                                }
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_@todoList.Id" href="#collapseThree_@todoList.Id">
-                            Show Collaborators
-                        </a>
-                        <p class="text-right">
-                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </p>
-                    </h4>
-                    </div>
-                    <div id="collapseThree_@todoList.Id" class="panel-collapse collapse">
-                        <div class="collapse panel-body" id="collapseExample1">
-                            <p>
-                                <h5>Add collaborator:</h5>
-                                <input type="email" />
-                                <button type="button" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-ok"></span>
-                                </button>
-                            </p>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Show complete Entries
+                        </h4>
                         </div>
-                        <div class="panel-body">
-                            <p>Owner: @todoList.Owner</p>
-                            <p>Contributors:
-                                <ul>
-                                    <li>Nummer eins</li>
-                                    <li>Nummer zwei</li>
-                                </ul>
-                            </p>
+                        <div>
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <th>Name</th>
+                                        <th>Due Date</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var todoItem in Model.todoItemList)
+                                    { 
+                                        if (todoItem.IsComplete == true)
+                                        {
+                                        <tr>
+                                            <td>@todoItem.Name</td>
+                                            <td>@todoItem.Until</td>
+                                            <td class="text-right">
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="test">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                                
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="test">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        }
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title"><span class="label label-success">Owner</span> <span class="label label-info">Collaborator</span></h5>
+                </div>
+                <div class="panel-body">
+                    <p><span class="label label-success">@todoList.Owner dd</span>
+                        <span class="label label-info">Collaborator 1</span>
+                        <span class="label label-info">Collaborator 2</span>
+                    </p>
+                    <p><input type="email" class="form-control" placeholder="Email"></p>
                 </div>
             </div>
         </div>
