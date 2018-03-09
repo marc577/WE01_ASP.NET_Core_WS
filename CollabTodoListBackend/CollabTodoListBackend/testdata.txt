@@ -1,0 +1,72 @@
+USer1:
+{
+  "id": "d3f9e0b0-3c05-4bb8-9c2c-be104db2c070",
+  "lastName": "string",
+  "firstName": "string",
+  "mailAdress": "string",
+  "password": "string"
+}
+User2:
+{
+  "id": "1cda8296-e835-47cf-810f-49c430a74f83",
+  "lastName": "strsdadasding",
+  "firstName": "string",
+  "mailAdress": "string",
+  "password": "string"
+}
+
+List:
+{
+  "id": "da9d18a4-371f-46b1-a3b5-1fbeece2ce2f",
+  "name": "string",
+  "ownerID": "d3f9e0b0-3c05-4bb8-9c2c-be104db2c070",
+  "todoItems": [],
+  "collaborators": []
+}
+
+"todoItems": [
+      {
+        "id": "baa1a5a0-2c13-4c3f-b543-dec9869c6c53",
+        "name": "Item1",
+        "isComplete": false,
+        "listID": "41a4c175-5b8d-4edc-bd1d-eafe018ac3c8",
+        "workerID": "00000000-0000-0000-0000-000000000000",
+        "worker": null,
+        "until": "0001-01-01T00:00:00"
+      }
+    ],
+
+
+    [
+  {
+    "id": "5c7ad24f-528c-4e97-bea7-4540ae137b91",
+    "lastName": "Admin",
+    "firstName": "Sys",
+    "mailAdress": "sys@admin.de",
+    "password": "123456"
+  },
+  {
+    "id": "6bc2b171-319a-439d-bff8-ab5926843cbc",
+    "lastName": "Collab",
+    "firstName": "User",
+    "mailAdress": "col@lab.de",
+    "password": "12345"
+  }
+]
+
+"todoItems": [
+      {
+        "id": "5f4ef024-ec3b-40f3-9d73-b22ddd7e047c",
+        "name": "Item1",
+        "isComplete": false,
+        "listID": "9b4f8846-fc52-45f3-b09b-2feb6fd763f8",
+        "workerID": "00000000-0000-0000-0000-000000000000",
+        "worker": null,
+        "until": "0001-01-01T00:00:00"
+      }
+    ],
+
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY29sQGxhYi5kZSIsImV4cCI6MTUyMDYzNDQxMSwiaXNzIjoibG9jYWxob3N0IiwiYXVkIjoibG9jYWxob3N0In0.GRj7QqXy3zywMVdpIjA-2xmNwOQGhrVYSO1n8jpFUgM"
+}
