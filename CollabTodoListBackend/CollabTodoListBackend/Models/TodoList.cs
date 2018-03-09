@@ -27,6 +27,8 @@ namespace WebEngineering01_ASP.NetCore.Models
         [ForeignKey("Owner")]
         public virtual Guid OwnerID { get; set; }
 
+        public virtual User Owner { get; set; }
+
 
         //[DefaultValue(List<TodoItem>)]
         public virtual ICollection<TodoItem> TodoItems { get; set; }
