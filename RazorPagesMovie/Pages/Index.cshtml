@@ -133,7 +133,7 @@
                     <h5 class="panel-title"><span class="label label-success">Owner</span> <span class="label label-info">Collaborator</span></h5>
                 </div>
                 <div class="panel-body">
-                    <p><span class="label label-success">@todoList.OwnerID</span>
+                    <p><span class="label label-success">@todoList.Owner.FirstName @todoList.Owner.LastName</span>
                         @foreach (var collab in todoList.Collaborators)
                         {
                             <span class="label label-info">@collab.Collaborator.FirstName @collab.Collaborator.LastName</span>
