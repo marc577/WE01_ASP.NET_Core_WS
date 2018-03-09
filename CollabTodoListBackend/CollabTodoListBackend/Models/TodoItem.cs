@@ -22,10 +22,6 @@ namespace WebEngineering01_ASP.NetCore.Models
         [ForeignKey("List")]
         public virtual Guid ListID { get; set; }
 
-
-        [Required]
-        public virtual TodoList List { get; set; }
-
         [DefaultValue(null)]
         public virtual DateTime Until { get; set; }
 

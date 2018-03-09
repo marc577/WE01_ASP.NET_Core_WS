@@ -9,6 +9,9 @@ namespace WebEngineering01_ASP.NetCore.Models
 {
     public class User
     {
+        public User(){
+            //Lists = new List<TodoListUser>();
+        }
         public virtual Guid Id { get; set; }
 
         [Required]
@@ -23,6 +26,6 @@ namespace WebEngineering01_ASP.NetCore.Models
         [Required]
         public virtual string Password { get; set; }
 
-        public virtual ICollection<TodoListUser> Lists { get; set; }
+        //public virtual ICollection<TodoListUser> Lists { get; } = new List<TodoListUser>();
     }
 }

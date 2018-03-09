@@ -15,47 +15,6 @@ namespace TodoApi.Controllers
         public TodoListController(TodoContext context)
         {
             _context = context;
-
-            if (_context.TodoItem.Count() == 0)
-            {
-                List<User> collaborators = new List<User>();
-                collaborators.Add(new User
-                {
-                    LastName = "Collab",
-                    FirstName = "User",
-                    MailAdress = "col@lab.de",
-                    Password = "12345"
-                });
-
-                _context.TodoItem.Add(new TodoItem
-                {
-                    Name = "Do Stuff",
-                    List = new TodoList
-                    {
-                        Name = "Stuff"
-                        /*Owner = new User
-                        {
-                            LastName = "Admin",
-                            FirstName = "Sys",
-                            MailAdress = "sys@admin.de",
-                            Password = "123456"
-                        },*/
-                        //Collaborators = collaborators
-                    }
-                });
-                _context.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Returns all TodoLists.
-        /// </summary>
-        /// <returns>All TodoLists</returns>
-        /// <response code="200">Returns all items</response>
-        [HttpGet]
-        public IEnumerable<TodoList> GetAll()
-        {
-            return _context.TodoList.ToList();
         }
 
 
@@ -85,9 +44,8 @@ namespace TodoApi.Controllers
         ///
         ///     POST /TodoList
         ///     {
-        ///        "id": 1,
         ///        "name": "List1",
-        ///        "owner": USEROBJECT
+        ///        "ownerID": ownerID
         ///     }
         ///
         /// </remarks>
@@ -104,10 +62,6 @@ namespace TodoApi.Controllers
             {
                 return BadRequest();
             }
-            /*if(item.Owner == null)
-            {
-                item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
-            }*/
             _context.TodoList.Add(item);
             _context.SaveChanges();
 
@@ -123,19 +77,20 @@ namespace TodoApi.Controllers
         ///     POST /TodoList
         ///     {
         ///        "id": 1,
-        ///        "name": "List1",
-        ///        "owner": USEROBJECT
+        ///        "name": "List1"
         ///     }
         ///
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="item"></param>
+        /// <returns>The updated Item</returns>
+        /// <response code="200">If the item was succesfully updated</response>
         /// <response code="400">If the item is null</response>
         /// <response code="404">If the id is not found</response>
         [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] TodoList item)
         {
-            if (item == null || !item.Id.Equals(id))
+            if (item == null || !item.Id.Equals(id) || item.Name == null)
             {
                 return BadRequest();
             }
@@ -147,19 +102,19 @@ namespace TodoApi.Controllers
             }
 
             todoList.Name = item.Name;
-            //todoList.Owner = item.Owner;
-            todoList.TodoItems = item.TodoItems;
-            todoList.Collaborators = item.Collaborators;
+            //todoList.TodoItems = item.TodoItems;
+            //todoList.Collaborators = item.Collaborators;
 
             _context.TodoList.Update(todoList);
             _context.SaveChanges();
-            return new NoContentResult();
+            return new OkObjectResult(todoList);
         }
 
         /// <summary>
         /// Deletes a specific TodoItem.
         /// </summary>
         /// <param name="id"></param>
+        /// <response code="204">If the user was successfully deleted</response>
         /// <response code="404">If the id is not found</response>
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)

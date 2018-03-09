@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CollabTodoListBackend.Migrations
 {
@@ -8,21 +8,6 @@ namespace CollabTodoListBackend.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    MailAdress = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "TodoList",
                 columns: table => new
@@ -34,12 +19,21 @@ namespace CollabTodoListBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TodoList", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TodoList_User_OwnerID",
-                        column: x => x.OwnerID,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    MailAdress = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,20 +41,21 @@ namespace CollabTodoListBackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     IsComplete = table.Column<bool>(nullable: false),
                     ListID = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Until = table.Column<DateTime>(nullable: false)
+                    Until = table.Column<DateTime>(nullable: false),
+                    TodoListId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TodoItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TodoItem_TodoList_ListID",
-                        column: x => x.ListID,
+                        name: "FK_TodoItem_TodoList_TodoListId",
+                        column: x => x.TodoListId,
                         principalTable: "TodoList",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,14 +83,9 @@ namespace CollabTodoListBackend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TodoItem_ListID",
+                name: "IX_TodoItem_TodoListId",
                 table: "TodoItem",
-                column: "ListID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TodoList_OwnerID",
-                table: "TodoList",
-                column: "OwnerID");
+                column: "TodoListId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TodoListUser_TodoListID",
@@ -112,10 +102,10 @@ namespace CollabTodoListBackend.Migrations
                 name: "TodoListUser");
 
             migrationBuilder.DropTable(
-                name: "TodoList");
+                name: "User");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "TodoList");
         }
     }
 }

@@ -15,36 +15,6 @@ namespace TodoApi.Controllers
         public UserController(TodoContext context)
         {
             _context = context;
-
-            if (_context.TodoItem.Count() == 0)
-            {
-                List<User> collaborators = new List<User>();
-                collaborators.Add(new User
-                {
-                    LastName = "Collab",
-                    FirstName = "User",
-                    MailAdress = "col@lab.de",
-                    Password = "12345"
-                });
-
-                _context.TodoItem.Add(new TodoItem
-                {
-                    Name = "Do Stuff",
-                    List = new TodoList
-                    {
-                        Name = "Stuff"
-                        /*Owner = new User
-                        {
-                            LastName = "Admin",
-                            FirstName = "Sys",
-                            MailAdress = "sys@admin.de",
-                            Password = "123456"
-                        },*/
-                        //Collaborators = collaborators
-                    }
-                });
-                _context.SaveChanges();
-            }
         }
 
         /// <summary>
@@ -52,11 +22,11 @@ namespace TodoApi.Controllers
         /// </summary>
         /// <returns>All Users</returns>
         /// <response code="200">Returns all items</response>
-        [HttpGet]
+        /*[HttpGet]
         public IEnumerable<User> GetAll()
         {
             return _context.User.ToList();
-        }
+        }*/
 
         /// <summary>
         /// Returns a User.
@@ -83,7 +53,6 @@ namespace TodoApi.Controllers
         ///
         ///     POST /User
         ///     {
-        ///        "id": 1,
         ///        "lastName": "Last",
         ///        "firstName": "First",
         ///        "mailAdress" : "first@last.tld",
@@ -119,7 +88,6 @@ namespace TodoApi.Controllers
         ///
         ///     POST /User
         ///     {
-        ///        "id": 1,
         ///        "lastName": "Last",
         ///        "FirstName": "First",
         ///        "mailAdress" : "first@last.tld",
@@ -129,12 +97,13 @@ namespace TodoApi.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="item"></param>
+        /// <response code="200">If the item was successfully updated</response>
         /// <response code="400">If the item is null</response>
-        /// <response code="404">If the id is not found</response>
+        /// <response code="404">If the id was not found</response>
         [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] User item)
         {
-            if (item == null || !item.Id.Equals(id))
+            if (item == null || item.Password == null)
             {
                 return BadRequest();
             }
@@ -152,13 +121,14 @@ namespace TodoApi.Controllers
 
             _context.User.Update(user);
             _context.SaveChanges();
-            return new NoContentResult();
+            return new OkObjectResult(user);
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// Deletes a User.
         /// </summary>
         /// <param name="id"></param>
+        /// <response code="204">If the user was successfully deleted</response>
         /// <response code="400">If the item is null</response>
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
