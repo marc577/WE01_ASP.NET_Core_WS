@@ -32,6 +32,17 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
+            foreach (TodoItem i in item.TodoItems)
+            {
+                if (i.WorkerID != null)
+                {
+                    var fuse = _context.User.Find(i.WorkerID);
+                    if (fuse != null)
+                    {
+                        i.Worker = fuse;
+                    }
+                }
+            }
             //item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
             return new ObjectResult(item);
         }

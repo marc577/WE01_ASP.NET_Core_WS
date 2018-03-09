@@ -110,6 +110,29 @@ namespace TodoApi.Controllers
             todoItem.Name = item.Name;
             todoItem.Until = item.Until;
 
+            if(item.WorkerID != null){
+                var l = _context.TodoList.Find(todoItem.ListID);
+                if(item.WorkerID.Equals(l.OwnerID)){
+                    var fuse = _context.User.Find(l.OwnerID);
+                    if (fuse != null)
+                    {
+                        todoItem.WorkerID = fuse.Id;
+                        todoItem.Worker = fuse;
+                    }
+                }
+                else if(l != null){
+                    foreach(TodoListUser u in l.Collaborators){
+                        if(u.CollaboratorID.Equals(item.WorkerID)){
+                            var fuse = _context.User.Find(u.CollaboratorID);
+                            if(fuse != null){
+                                todoItem.WorkerID = fuse.Id;
+                                todoItem.Worker = fuse;
+                            }
+                        }
+                    }
+                }
+            }
+
             _context.TodoItem.Update(todoItem);
             _context.SaveChanges();
             return new OkObjectResult(todoItem);

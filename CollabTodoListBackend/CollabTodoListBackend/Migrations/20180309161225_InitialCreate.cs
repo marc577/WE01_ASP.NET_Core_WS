@@ -44,6 +44,7 @@ namespace CollabTodoListBackend.Migrations
                     Name = table.Column<string>(nullable: false),
                     IsComplete = table.Column<bool>(nullable: false),
                     ListID = table.Column<Guid>(nullable: false),
+                    WorkerID = table.Column<Guid>(nullable: false),
                     Until = table.Column<DateTime>(nullable: false),
                     TodoListId = table.Column<Guid>(nullable: true)
                 },

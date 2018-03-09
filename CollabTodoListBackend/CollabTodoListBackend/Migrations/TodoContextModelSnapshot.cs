@@ -36,6 +36,8 @@ namespace CollabTodoListBackend.Migrations
 
                     b.Property<DateTime>("Until");
 
+                    b.Property<Guid>("WorkerID");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TodoListId");

@@ -46,6 +46,19 @@ namespace CollabTodoListBackend.Controllers
                     }
                 }
             }
+            foreach(TodoList l in result){
+                foreach(TodoItem i in l.TodoItems){
+                    if (i.WorkerID != null)
+                    {
+                        var fuse = _context.User.Find(i.WorkerID);
+                        if (fuse != null)
+                        {
+                            i.Worker = fuse;
+                        }
+                    }
+                }
+
+            }
             return result;
         }
 

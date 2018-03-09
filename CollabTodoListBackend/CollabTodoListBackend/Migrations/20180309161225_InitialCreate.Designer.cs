@@ -12,7 +12,7 @@ using WebEngineering01_ASP.NetCore.Models;
 namespace CollabTodoListBackend.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20180309145905_InitialCreate")]
+    [Migration("20180309161225_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,8 @@ namespace CollabTodoListBackend.Migrations
                     b.Property<Guid?>("TodoListId");
 
                     b.Property<DateTime>("Until");
+
+                    b.Property<Guid>("WorkerID");
 
                     b.HasKey("Id");
 
