@@ -11,6 +11,8 @@ using RazorPagesMovie.Models;
 namespace RazorPagesMovie.Pages{
     public class IndexModel : PageModel {
 
+        private string API = "http://localhost:62548/api/";
+
         public List<TodoList> todolistList  { get; set; }
 
         public List<TodoItem> todoItemList {get;set;}
@@ -22,19 +24,31 @@ namespace RazorPagesMovie.Pages{
         private void writeMessage() {
             var client = new WebClient();
             client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-            var response = client.DownloadString("http://localhost:62548/api/TodoList");
+            var response = client.DownloadString("http://localhost:62548/api/TodoCollab/5c7ad24f-528c-4e97-bea7-4540ae137b91");
+            //var response = client.DownloadString("http://localhost:62548/api/TodoList");
             var releases = JArray.Parse(response);
             todolistList = releases.ToObject<List<TodoList>>();
-
-            response = client.DownloadString("http://localhost:62548/api/TodoItem");
-            releases = JArray.Parse(response);
-            todoItemList = releases.ToObject<List<TodoItem>>();
+            Console.Write(todolistList);
+            //response = client.DownloadString("http://localhost:62548/api/TodoItem");
+            //releases = JArray.Parse(response);
+            //todoItemList = releases.ToObject<List<TodoItem>>();
     
         }
 
-        public IActionResult OnPostTest() {
+        public IActionResult OnPostAddItem(String listID, String todoText, String todoDate) {
+            TodoItem item = new TodoItem();
+            item.ListID = new Guid(listID);
+            item.Name = todoText;
+            String json = new JObject(item).ToString();
+
+
+            Console.WriteLine("hallo Sabine");
+            var client = new WebClient();
+            client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+            client.Headers.Add("content-type","application/json");
+            client.UploadString(API + "TodoItem", json);
             // TODO: Login Webservice aufrufen
-            return RedirectToPage("/Login");
+            return RedirectToPage("/Index");
         }
     }
 }
