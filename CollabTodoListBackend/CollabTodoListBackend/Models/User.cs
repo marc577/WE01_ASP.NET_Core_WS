@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,5 +28,14 @@ namespace WebEngineering01_ASP.NetCore.Models
         public virtual string Password { get; set; }
 
         //public virtual ICollection<TodoListUser> Lists { get; } = new List<TodoListUser>();
+    }
+
+    [NotMapped]
+    public class UserRequest {
+        [Required]
+        public virtual string MailAdress { get; set; }
+
+        [Required]
+        public virtual string Password { get; set; }
     }
 }

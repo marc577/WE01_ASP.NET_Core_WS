@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using WebEngineering01_ASP.NetCore.Models;
 
 namespace CollabTodoListBackend.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/TodoCollab")]
     public class TodoCollabController : Controller
