@@ -1,15 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RazorPagesMovie.Models
 {
     public class User
     {
-        public Guid Id { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string MailAdress { get; set; }
-        public string Password { get; set; }
-        public ICollection<TodoListUser> Lists { get; set; }
+        public User(){
+            //Lists = new List<TodoListUser>();
+        }
+        public virtual Guid Id { get; set; }
+
+        [Required]
+        public virtual string LastName { get; set; }
+
+        [Required]
+        public virtual string FirstName { get; set; }
+
+        [Required]
+        public virtual string MailAdress { get; set; }
+
+        [Required]
+        public virtual string Password { get; set; }
+
+        //public virtual ICollection<TodoListUser> Lists { get; } = new List<TodoListUser>();
     }
 }
