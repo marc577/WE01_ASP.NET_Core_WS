@@ -39,20 +39,31 @@
                         </div>
                         <div  >
                             <div class="panel-body">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="test-table">
                                             <thead>
                                                 <th>Name</th>
                                                 <th>Due Date</th>
+                                                <th>Worker</th>
                                                 <th></th>
                                             </thead>
                                             <tbody>
 
                                         <tr>
                                             <form method="post">
-                                            <td><input type="text" class="form-control" name="todoText" /></td>
-                                            <td><input type="date" class="form-control" name="todoDate" /></td>
+                                            <td><input type="text" class="form-control" asp-for="newListItem.Name" name="todoText" /></td>
+                                            <td><input type="datetime-local" value="0" class="form-control" name="todoDate" /></td>
+                                            <td>
+                                                <select class="form-control" id="exampleFormControlSelect1" name="workerId">
+                                                    <option value="0">no worker</option>
+                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                    }
+                                                </select>
+                                            </td>
                                             <td class="text-right">
-                                                <input type="hidden" name="list" value="@todoList.Id" />
+                                                <input type="hidden" name="listId" value="@todoList.Id" asp-for="newListItem.ListID" />
                                                 <button type="submit" class="btn btn-default" asp-page-handler="addItem">
                                                     <span class="glyphicon glyphicon-plus"></span>
                                                 </button>
@@ -64,19 +75,41 @@
                                         if (todoItem.IsComplete == false)
                                         {
                                         <tr>
-                                            <td>@todoItem.Name</td>
-                                            <td>@todoItem.Until</td>
+                                            <form method="post">
+                                            <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
+                                            <td><input type="datetime-local" value="@todoItem.Until" name="todoDate"/></td>
+                                            <td>
+                                                <select class="form-control selectpicker" id="exampleFormControlSelect1" name="workerId" >
+                                                    <option value="0" selected>no worker</option>
+                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            @if (todoItem.Worker != null) 
+                                            {
+                                                <td>@todoItem.Worker.FirstName @todoItem.Worker.LastName</td>
+                                            } else {
+                                                <td></td>
+                                            }
+                                            
                                             <td class="text-right">
-                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="addItem" >
+                                            
+                                            <input type="hidden" name="todoId" value="@todoItem.Id"/>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="check" >
                                                     <span class="glyphicon glyphicon-ok"></span>
                                                 </button>
-                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="pencil">
+                                                <button type="submit" class="btn btn-default btn-xs"asp-page-handler="editItem" >
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>
-                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="pencil">
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="delete">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
+                                                
                                             </td>
+                                            </form>
                                         </tr>
                                         } 
                                     }
@@ -99,6 +132,7 @@
                                     <thead>
                                         <th>Name</th>
                                         <th>Due Date</th>
+                                        <th>Worker</th>
                                         <th></th>
                                     </thead>
                                     <tbody>
@@ -109,14 +143,25 @@
                                         <tr>
                                             <td>@todoItem.Name</td>
                                             <td>@todoItem.Until</td>
+                                            @if (todoItem.Worker != null) 
+                                            {
+                                                <td>@todoItem.Worker.FirstName @todoItem.Worker.LastName</td>
+                                            } else {
+                                                <td></td>
+                                            }
+                                            <td></td>
                                             <td class="text-right">
-                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="test">
+                                            <form method="post">
+                                                <input type="hidden" name="todoName" value="@todoItem.Name"/>
+                                                <input type="hidden" name="todoId" value="@todoItem.Id"/>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="uncheck">
                                                     <span class="glyphicon glyphicon-remove"></span>
                                                 </button>
                                                 
-                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="test">
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="delete">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
+                                                </form>
                                             </td>
                                         </tr>
                                         }
@@ -154,7 +199,5 @@
         </div>
     </div>
     }
-
-    
     
 </div>

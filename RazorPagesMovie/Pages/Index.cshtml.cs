@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -41,12 +43,14 @@ namespace RazorPagesMovie.Pages{
             item.Name = todoText;
             String json = new JObject(item).ToString();
 
-
-            Console.WriteLine("hallo Sabine");
-            var client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-            client.Headers.Add("content-type","application/json");
-            client.UploadString(API + "TodoItem", json);
+            var cli = new WebClient();
+            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
+            string response = cli.UploadString(API + "TodoItem", json);
+            
+            //var client = new WebClient();
+            //client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+            //client.Headers.Add("content-type","application/json");
+            //client.UploadString(API + "TodoItem", json);
             // TODO: Login Webservice aufrufen
             return RedirectToPage("/Index");
         }
