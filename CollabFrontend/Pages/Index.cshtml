@@ -77,24 +77,28 @@
                                         <tr>
                                             <form method="post">
                                             <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
-                                            <td><input type="datetime-local" value="@todoItem.Until" name="todoDate"/></td>
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddThh:mm") == "0001-01-01T12:00") 
+                                            {
+                                                <td><input type="datetime-local" name="todoDate"/></td>
+                                            } else {
+                                                <td><input type="datetime-local" value="@todoItem.Until.ToString("yyyy-MM-ddThh:mm")" name="todoDate"/></td>
+                                            }
+                                            
                                             <td>
                                                 <select class="form-control selectpicker" id="exampleFormControlSelect1" name="workerId" >
                                                     <option value="0" selected>no worker</option>
                                                     <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
-                                                        <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        @if (collab.Collaborator.Id == todoItem.WorkerID)
+                                                        {
+                                                            <option value="@collab.Collaborator.Id" selected>@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        } else {
+                                                            <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        }
                                                     }
                                                 </select>
                                             </td>
-                                            @if (todoItem.Worker != null) 
-                                            {
-                                                <td>@todoItem.Worker.FirstName @todoItem.Worker.LastName</td>
-                                            } else {
-                                                <td></td>
-                                            }
-                                            
                                             <td class="text-right">
                                             
                                             <input type="hidden" name="todoId" value="@todoItem.Id"/>
@@ -141,17 +145,31 @@
                                         if (todoItem.IsComplete == true)
                                         {
                                         <tr>
-                                            <td>@todoItem.Name</td>
-                                            <td>@todoItem.Until</td>
-                                            @if (todoItem.Worker != null) 
-                                            {
-                                                <td>@todoItem.Worker.FirstName @todoItem.Worker.LastName</td>
-                                            } else {
-                                                <td></td>
-                                            }
-                                            <td></td>
-                                            <td class="text-right">
                                             <form method="post">
+                                            <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddThh:mm") == "0001-01-01T12:00") 
+                                            {
+                                                <td><input type="datetime-local" name="todoDate" disabled/></td>
+                                            } else {
+                                                <td><input type="datetime-local" disabled value="@todoItem.Until.ToString("yyyy-MM-ddThh:mm")" name="todoDate"/></td>
+                                            }
+                                            
+                                            <td>
+                                                <select class="form-control selectpicker" name="workerId" >
+                                                    <option value="0" selected>no worker</option>
+                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        @if (collab.Collaborator.Id == todoItem.WorkerID)
+                                                        {
+                                                            <option value="@collab.Collaborator.Id" selected>@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        } else {
+                                                            <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="text-right">
                                                 <input type="hidden" name="todoName" value="@todoItem.Name"/>
                                                 <input type="hidden" name="todoId" value="@todoItem.Id"/>
                                                 <button type="submit" class="btn btn-default btn-xs" asp-page-handler="uncheck">
@@ -161,8 +179,8 @@
                                                 <button type="submit" class="btn btn-default btn-xs" asp-page-handler="delete">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </button>
-                                                </form>
                                             </td>
+                                            </form>
                                         </tr>
                                         }
                                     }

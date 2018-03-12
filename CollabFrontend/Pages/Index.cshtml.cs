@@ -40,21 +40,14 @@ namespace CollabFrontend.Pages
         }
 
         public IActionResult OnPostAddItem(String listId, String todoText, String todoDate, String workerId) {
-           
-
-            String jsonTest = "";
-            if (workerId == "0") {
-                jsonTest = "{ "+ 
-                "'name': '"+todoText+"'," +
-                "'listID': '"+listId+"'" + 
-                "}";
-            } else {
-                jsonTest = "{ "+ 
-                "'name': '"+todoText+"'," +
-                "'listID': '"+listId+"'," + 
-                "'workerID': '"+workerId+"'" + 
-                "}";
+            String jsonTest = "{ 'listID': '"+listId+"',";
+            if (workerId != "0") {
+                jsonTest = jsonTest + "'workerID': '"+workerId+"',";
             }
+            if(todoDate != null) {
+                jsonTest = jsonTest +"'until': '"+todoDate+"',";
+            }
+            jsonTest +=  "'name': '"+todoText+"' }";
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
@@ -63,8 +56,15 @@ namespace CollabFrontend.Pages
             return RedirectToPage("/Index");
         }
 
-        public IActionResult OnPostCheck (String todoId, String todoName) {
-            String jsonTest = "{'name': '"+todoName+"','isComplete': true }";
+        public IActionResult OnPostCheck (String todoId, String todoName, String todoDate, String workerId) {
+            String jsonTest = "{";
+            if (workerId != "0") {
+                jsonTest = jsonTest + "'workerID': '"+workerId+"',";
+            }
+            if(todoDate != null) {
+                jsonTest = jsonTest +"'until': '"+todoDate+"',";
+            }
+            jsonTest +=  "'name': '"+todoName+"','isComplete': true}";
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
@@ -73,8 +73,15 @@ namespace CollabFrontend.Pages
             return RedirectToPage("/Index");
         }
 
-        public IActionResult OnPostUncheck (String todoId, String todoName) {
-            String jsonTest = "{'name': '"+todoName+"','isComplete': false }";
+        public IActionResult OnPostUncheck (String todoId, String todoName, String todoDate, String workerId) {
+            String jsonTest = "{";
+            if (workerId != "0") {
+                jsonTest = jsonTest + "'workerID': '"+workerId+"',";
+            }
+            if(todoDate != null) {
+                jsonTest = jsonTest +"'until': '"+todoDate+"',";
+            }
+            jsonTest +=  "'name': '"+todoName+"','isComplete': false}";
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
@@ -93,19 +100,14 @@ namespace CollabFrontend.Pages
         }
 
         public IActionResult OnPostEditItem (String todoId, String todoName, String todoDate, String workerId) {
-            String jsonTest ="";
-            if (workerId == "0") {
-                jsonTest = "{ "+ 
-                "'name': '"+todoName+"'," +
-                "'until': '"+todoDate+"'" + 
-                "}";
-            } else {
-                jsonTest = "{ "+ 
-                "'name': '"+todoName+"'," +
-                "'workerID': '"+workerId+"'" + 
-                "'until': '"+todoDate+"'" + 
-                "}";
+            String jsonTest = "{ ";
+            if (workerId != "0") {
+                jsonTest = jsonTest + "'workerID': '"+workerId+"',";
             }
+            if(todoDate != null) {
+                jsonTest = jsonTest +"'until': '"+todoDate+"',";
+            }
+            jsonTest +=  "'name': '"+todoName+"' }";
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
