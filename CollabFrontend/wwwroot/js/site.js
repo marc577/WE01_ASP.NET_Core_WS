@@ -53,16 +53,29 @@ $(function() {
         }
 	});
 	
-	$('#newlistitemname').keyup(function() {
+	$('.newlistitemname').keyup(function() {
         var empty = false;
-		if ($("#newlistitemname").val() == '') {
+		if ($(this).val() == '') {
 			empty = true;
 		}
 
         if (empty) {
-            $('#createNewItem').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('.createNewItem').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
         } else {
-            $('#createNewItem').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('.createNewItem').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+	});
+	
+	$('#newListName').keyup(function() {
+        var empty = false;
+		if ($("#newListName").val() == '') {
+			empty = true;
+		}
+
+        if (empty) {
+            $('#createNewListButton').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+            $('#createNewListButton').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
         }
 	});
 })()

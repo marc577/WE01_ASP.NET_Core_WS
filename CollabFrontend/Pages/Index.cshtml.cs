@@ -115,5 +115,27 @@ namespace CollabFrontend.Pages
 
             return RedirectToPage("/Index");
         }
+
+        public IActionResult OnPostCreateList (String listName) {
+            String json = "{ 'name': '"+listName+"', 'ownerID': '5c7ad24f-528c-4e97-bea7-4540ae137b91' }";
+
+            var cli = new WebClient();
+            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
+            string response = cli.UploadString("http://localhost:62548/api/TodoList","POST", json);
+
+            return RedirectToPage("/Index");
+        }
+
+        public IActionResult OnPostDeleteList (String listId) {
+            var cli = new WebClient();
+            string response = cli.UploadString(API + "TodoList/"+listId,"DELETE","");
+
+            return RedirectToPage("/Index");
+        }
+
+        public IActionResult OnPostAddCollab (String listId, String email) {
+        
+            return RedirectToPage("/Index");
+        }
     }
 }
