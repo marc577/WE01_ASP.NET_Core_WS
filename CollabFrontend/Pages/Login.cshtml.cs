@@ -18,12 +18,12 @@ namespace CollabFrontend.Pages {
             
         }
 
-        public IActionResult OnPostLogin() {
+        public IActionResult OnPostLogin(String email, String password) {
             // TODO: Login Webservice aufrufen
             return RedirectToPage("/Index");
         }
 
-        public IActionResult OnPostRegistrate() {
+        public IActionResult OnPostRegistrate(String email, String firstname, String lastname, String password) {
             // TODO: Registrate Webservice aufrufen
             return Page();
         }
