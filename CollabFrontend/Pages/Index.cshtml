@@ -89,16 +89,22 @@
                                         <tr>
                                             <form method="post">
                                             <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
-                                            @if (todoItem.Until.ToString("yyyy-MM-ddThh:mm") == "0001-01-01T12:00") 
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
                                             {
                                                 <td><input type="datetime-local" name="todoDate"/></td>
                                             } else {
-                                                <td><input type="datetime-local" value="@todoItem.Until.ToString("yyyy-MM-ddThh:mm")" name="todoDate"/></td>
+                                                <td><input type="datetime-local" value="@todoItem.Until.ToString("yyyy-MM-ddTHH:mm")" name="todoDate"/></td>
                                             }
                                             
                                             <td>
                                                 <select class="form-control selectpicker" id="exampleFormControlSelect1" name="workerId" >
-                                                    <option value="0" selected>no worker</option>
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="0">no worker</option>
+                                                    } else {
+                                                        <option value="0" selected>no worker</option>
+                                                    }
+                                                    
                                                     <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
@@ -159,7 +165,7 @@
                                         <tr>
                                             <form method="post">
                                             <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
-                                            @if (todoItem.Until.ToString("yyyy-MM-ddThh:mm") == "0001-01-01T12:00") 
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
                                             {
                                                 <td><input type="datetime-local" name="todoDate" disabled/></td>
                                             } else {
@@ -168,7 +174,12 @@
                                             
                                             <td>
                                                 <select class="form-control selectpicker" name="workerId" >
-                                                    <option value="0" selected>no worker</option>
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="0">no worker</option>
+                                                    } else {
+                                                        <option value="0" selected>no worker</option>
+                                                    }
                                                     <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {

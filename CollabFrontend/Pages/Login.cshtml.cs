@@ -11,6 +11,8 @@ using System.Net;
 namespace CollabFrontend.Pages {
     public class LoginModel : PageModel {
 
+        public User newCreatedUser  { get; set; }
+
         public void OnGet() {
         }
 
@@ -24,7 +26,16 @@ namespace CollabFrontend.Pages {
         }
 
         public IActionResult OnPostRegistrate(String email, String firstname, String lastname, String password) {
-            // TODO: Registrate Webservice aufrufen
+            
+            String jsonTest = "{ 'lastName': '"+lastname+"', 'firstName': '"+firstname+"', 'mailAdress' : '"+email+"','password' : '"+password+"'}";
+
+            var cli = new WebClient();
+            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
+            String response = cli.UploadString(API + "User","POST", jsonTest);
+
+            var releases = JArray.Parse(response);
+            newCreatedUser = releases.ToObject<User>();
+
             return Page();
         }
 

@@ -20,7 +20,6 @@ $(function() {
 
 (function() {
     $('#login-form input').keyup(function() {
-		console.log("test");
 
         var empty = false;
         $('#login-form input').each(function() {
@@ -37,7 +36,6 @@ $(function() {
 	});
 	
 	$('#register-form input').keyup(function() {
-		console.log("test");
 
         var empty = false;
         $('#register-form input').each(function() {
@@ -46,10 +44,20 @@ $(function() {
             }
         });
 
+        if($("#password-register").val().valueOf() == $("#confirm-password").val().valueOf() && $("#password-register").val().valueOf()!=="") {
+            empty = false;
+        } else if($("#password-register").val().valueOf() != $("#confirm-password").val().valueOf()) {
+            $("#message").html("Passwörter stimmen nicht überein");
+            empty = true;
+        } else if($("#password-register").val().valueOf()=="") {
+            $("#message").html("");
+            empty = true;
+        }
+
         if (empty) {
-            $('#register-submit').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#register-submit').attr('disabled', 'disabled');
         } else {
-            $('#register-submit').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#register-submit').removeAttr('disabled');
         }
 	});
 	
@@ -57,7 +65,7 @@ $(function() {
         var empty = false;
 		if ($(this).val() == '') {
 			empty = true;
-		}
+        }
 
         if (empty) {
             $('.createNewItem').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
@@ -77,5 +85,5 @@ $(function() {
         } else {
             $('#createNewListButton').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
         }
-	});
+    });
 })()
