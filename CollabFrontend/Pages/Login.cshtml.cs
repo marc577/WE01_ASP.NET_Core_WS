@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorPagesMovie.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace CollabFrontend.Pages {
     public class LoginModel : PageModel {
@@ -23,7 +25,18 @@ namespace CollabFrontend.Pages {
         }
 
         public IActionResult OnPostLogin(String email, String password) {
-            // TODO: Login Webservice aufrufen
+
+            var cli = new WebClient();
+            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
+            var userR = new UserRequest(){MailAdress = email, Password = password};
+            var json = JsonConvert.SerializeObject(userR);
+
+            String response = cli.UploadString(API + "Login","POST", json);
+            var ob = JObject.Parse(response);
+
+            HttpContext.Session.SetString("token", "Bearer "+ ob.GetValue("token").ToString());
+            HttpContext.Session.SetString("user",ob.GetValue("userID").ToString());
+
             return RedirectToPage("/Index");
         }
 
@@ -33,14 +46,15 @@ namespace CollabFrontend.Pages {
             user.FirstName = "firstname";
             user.Password = "neu";
             user.MailAdress = "email@email.com";
-            
             String json = JsonConvert.SerializeObject(user);
 
-            String jsonTest = "{ 'lastName': '"+lastname+"', 'firstName': '"+firstname+"', 'mailAdress' : '"+email+"','password' : '"+password+"'}";
+            Console.WriteLine(json);
+
+            //String jsonTest = "{ 'lastName': '"+lastname+"', 'firstName': '"+firstname+"', 'mailAdress' : '"+email+"','password' : '"+password+"'}";
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            String response = cli.UploadString(API + "User","POST", jsonTest);
+            String response = cli.UploadString(API + "User","POST", json);
 
             return Page();
         }

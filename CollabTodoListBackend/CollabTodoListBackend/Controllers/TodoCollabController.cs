@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WebEngineering01_ASP.NetCore.Models;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace CollabTodoListBackend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/TodoCollab")]
     public class TodoCollabController : Controller
@@ -101,13 +103,23 @@ namespace CollabTodoListBackend.Controllers
             if(fUser == null){
                 return NotFound();
             }
-            var Col = new TodoListUser() { TodoListID = collabRequest.TodoListID, CollaboratorID = fUser.Id };
-            list.Collaborators.Add(Col);
 
-            //fUser.Lists.Add(user);
-            _context.SaveChanges();
-            //return CreatedAtRoute("GetTodoList", new { id = item.Id }, item);
-            return new NoContentResult();
+            //TODO: überprügfen ob schon der Collab drinne ist
+            //TODO: Collabs dürfen auch andere Collabs hinzufügen?
+
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if(list.OwnerID.ToString().Equals(guidstring)){
+                    var Col = new TodoListUser() { TodoListID = collabRequest.TodoListID, CollaboratorID = fUser.Id };
+                    list.Collaborators.Add(Col);
+                    _context.SaveChanges();
+                    return new NoContentResult();
+                }
+            }
+
+            return BadRequest();
         }
 
         /// <summary>

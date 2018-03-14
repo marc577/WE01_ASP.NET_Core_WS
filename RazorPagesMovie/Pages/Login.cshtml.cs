@@ -20,6 +20,10 @@ namespace RazorPagesMovie.Pages {
         public User user { get; set; }
 
         public void OnGet() {
+            var client = new WebClient();
+            client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+            var response = client.UploadString("http://localhost:62548/api/login", "POST","{'MailAdress': 'sys@admin.de', 'Passsword': '123456'}");
+            Console.WriteLine("Response"+response);
         }
 
         private void writeMessage() {

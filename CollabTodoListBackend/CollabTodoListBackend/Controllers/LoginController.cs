@@ -36,7 +36,7 @@ namespace TodoApi.Controllers
         ///
         ///     POST /Login
         ///     {
-        ///        "MailAdress": "listID",
+        ///        "MailAdress": "mailadress",
         ///        "Password": ownerID
         ///     }
         ///
@@ -52,24 +52,27 @@ namespace TodoApi.Controllers
             if (u != null){
                 if (u.Password == user.Password)
                 {
-                    var claims = new[]
-                    {
-                    new Claim(ClaimTypes.Name, user.MailAdress)
-                };
+                    var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, u.LastName),
+                        new Claim(JwtRegisteredClaimNames.Email, u.MailAdress),
+                        new Claim(JwtRegisteredClaimNames.Jti, u.Id.ToString())
+                    };
 
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                     var token = new JwtSecurityToken(
-                        issuer: "localhost",
-                        audience: "localhost",
+                        issuer: _configuration["Jwt:Issuer"],
+                        audience: _configuration["Jwt:Issuer"],
                         claims: claims,
-                        expires: DateTime.Now.AddMinutes(30),
+						expires: DateTime.Now.AddMinutes(30),
                         signingCredentials: creds);
-
+                    var t = new JwtSecurityTokenHandler().WriteToken(token);
                     return Ok(new
                     {
-                        token = new JwtSecurityTokenHandler().WriteToken(token)
+                        token = t,
+                        userID = u.Id,
+                        header = "Bearer " + t
                     });
                 } 
             }

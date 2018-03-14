@@ -10,6 +10,7 @@ namespace RazorPagesMovie.Models
 {
     public class User
     {
+        
         public User(){
             //Lists = new List<TodoListUser>();
         }
@@ -32,6 +33,7 @@ namespace RazorPagesMovie.Models
 
     [NotMapped]
     public class UserRequest {
+
         [Required]
         public virtual string MailAdress { get; set; }
 

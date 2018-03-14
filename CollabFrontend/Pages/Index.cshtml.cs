@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorPagesMovie.Models;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 
 namespace CollabFrontend.Pages
@@ -21,23 +22,45 @@ namespace CollabFrontend.Pages
 
         public List<TodoItem> todoItemList {get;set;}
         public String message  { get; set; }
+
+        public IndexModel() : base(){
+            todolistList = new List<TodoList>();
+            todoItemList = new List<TodoItem>();
+        }
         public void OnGet() {
-            writeMessage();
+            var jwt = HttpContext.Session.GetString("token");
+            if(jwt != null){
+                writeMessage(jwt);
+            }else{
+                Response.Redirect("/Login");
+            }
         }
 
-        private void writeMessage() {
-            var client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-            var response = client.DownloadString("http://localhost:62548/api/TodoCollab/5c7ad24f-528c-4e97-bea7-4540ae137b91");
-            //var response = client.DownloadString("http://localhost:62548/api/TodoList");
-            var releases = JArray.Parse(response);
-            todolistList = releases.ToObject<List<TodoList>>();
-            todolistList.Reverse();
-            Console.Write(todolistList);
-            //response = client.DownloadString("http://localhost:62548/api/TodoItem");
-            //releases = JArray.Parse(response);
-            //todoItemList = releases.ToObject<List<TodoItem>>();
-    
+        private void writeMessage(string bearer) {
+            string userID = HttpContext.Session.GetString("user");
+            if(userID != null){
+                var client = new WebClient();
+                client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+                client.Headers.Add("Authorization", bearer);
+                try{
+                    var response = client.DownloadString("http://localhost:62548/api/TodoCollab/"+ userID);
+                    var releases = JArray.Parse(response);
+                    todolistList = releases.ToObject<List<TodoList>>();
+                    todolistList.Reverse();
+                    todoItemList = releases.ToObject<List<TodoItem>>();
+                }catch(WebException e){
+                    var response = e.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                            Response.Redirect("Login");
+                        }
+                    }
+                }
+
+            }else{
+                Response.Redirect("Login");
+            }
         }
 
         public IActionResult OnPostAddItem(String listId, String todoText, String todoDate, String workerId) {
