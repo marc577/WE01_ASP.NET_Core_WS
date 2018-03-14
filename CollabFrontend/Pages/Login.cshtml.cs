@@ -28,7 +28,14 @@ namespace CollabFrontend.Pages {
         }
 
         public IActionResult OnPostRegistrate(String email, String firstname, String lastname, String password) {
+            User user = new User();
+            user.LastName = "lastname";
+            user.FirstName = "firstname";
+            user.Password = "neu";
+            user.MailAdress = "email@email.com";
             
+            String json = JsonConvert.SerializeObject(user);
+
             String jsonTest = "{ 'lastName': '"+lastname+"', 'firstName': '"+firstname+"', 'mailAdress' : '"+email+"','password' : '"+password+"'}";
 
             var cli = new WebClient();
