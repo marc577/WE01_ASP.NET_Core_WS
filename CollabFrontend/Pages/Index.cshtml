@@ -1,0 +1,250 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Collaborated To Do List";
+}
+
+    
+
+<div class="row">
+
+    </br>
+    
+    <div class="collapse" id="collapseExample">
+        <div class="well">
+            <form method="post" id="createList" class="form-inline">
+                <label for="newListName">Name for the new List</label>
+                <input type="text" id="newListName" class="form-control" name="listName" placeholder="Name for List"/>
+                <button class="btn btn-default" id="createNewListButton" disabled type="submit" asp-page-handler="createList"><span class="glyphicon glyphicon-plus"></span></button>
+            </form>
+        </div>
+    </div>
+
+    @foreach (var todoList in Model.todolistList)
+    {
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="panel-title">@todoList.Name</h3>
+                    <div class="pull-right">
+                        <form method="post">
+                        <input type="hidden" value="@todoList.Id" name="listId" />
+                        <button type="submit" class="btn btn-default" asp-page-handler="deleteList">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Show incomplete Entries
+                        </h4>
+                        </div>
+                        <div  >
+                            <div class="panel-body">
+                                <table class="table table-striped" id="test-table">
+                                            <thead>
+                                                <th>Name</th>
+                                                <th>Due Date</th>
+                                                <th>Worker</th>
+                                                <th></th>
+                                            </thead>
+                                            <tbody>
+
+                                        <tr>
+                                            <form method="post" id="index-form">
+                                            <td><input type="text" class="form-control newlistitemname" asp-for="newListItem.Name" name="todoText" /></td>
+                                            <td><input type="datetime-local" value="0" class="form-control" name="todoDate" /></td>
+                                            <td>
+                                                <select class="form-control" id="exampleFormControlSelect1" name="workerId">
+                                                    <option value="0">no worker</option>
+                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="text-right">
+                                                <input type="hidden" name="listId" value="@todoList.Id" asp-for="newListItem.ListID" />
+                                                <button disabled type="submit" class="btn btn-default createNewItem" asp-page-handler="addItem">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </td>
+                                            </form>
+                                        </tr>
+                                    @foreach (var todoItem in todoList.TodoItems)
+                                    {
+                                        if (todoItem.IsComplete == false)
+                                        {
+                                        <tr>
+                                            <form method="post">
+                                            <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
+                                            {
+                                                <td><input type="datetime-local" name="todoDate"/></td>
+                                            } else {
+                                                <td><input type="datetime-local" value="@todoItem.Until.ToString("yyyy-MM-ddTHH:mm")" name="todoDate"/></td>
+                                            }
+                                            
+                                            <td>
+                                                <select class="form-control selectpicker" name="workerId" >
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="00000000-0000-0000-0000-000000000000">no worker</option>
+                                                    } else {
+                                                        <option value="00000000-0000-0000-0000-000000000000" selected>no worker</option>
+                                                    }
+                                                    @if (todoItem.WorkerID == todoList.OwnerID) 
+                                                    {
+                                                        <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    }
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        @if (collab.Collaborator.Id == todoItem.WorkerID)
+                                                        {
+                                                            <option value="@collab.Collaborator.Id" selected>@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        } else {
+                                                            <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="text-right">
+                                            
+                                            <input type="hidden" name="todoId" value="@todoItem.Id"/>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="check" >
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                                <button type="submit" class="btn btn-default btn-xs"asp-page-handler="editItem" >
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </button>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="delete">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                                
+                                            </td>
+                                            </form>
+                                        </tr>
+                                        } 
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Show complete Entries
+                        </h4>
+                        </div>
+                        <div>
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <th>Name</th>
+                                        <th>Due Date</th>
+                                        <th>Worker</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var todoItem in todoList.TodoItems)
+                                    { 
+                                        if (todoItem.IsComplete == true)
+                                        {
+                                        <tr>
+                                            <form method="post">
+                                            <td><input type="text" value="@todoItem.Name" name="todoName" /></td>
+                                            @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
+                                            {
+                                                <td><input type="datetime-local" name="todoDate" disabled/></td>
+                                            } else {
+                                                <td><input type="datetime-local" disabled value="@todoItem.Until.ToString("yyyy-MM-ddThh:mm")" name="todoDate"/></td>
+                                            }
+                                            
+                                            <td>
+                                                <select class="form-control selectpicker" name="workerId" >
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="00000000-0000-0000-0000-000000000000">no worker</option>
+                                                    } else {
+                                                        <option value="00000000-0000-0000-0000-000000000000" selected>no worker</option>
+                                                    }
+                                                    @if (todoItem.WorkerID == todoList.OwnerID) 
+                                                    {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    }
+                                                    @foreach (var collab in todoList.Collaborators)
+                                                    {
+                                                        @if (collab.Collaborator.Id == todoItem.WorkerID)
+                                                        {
+                                                            <option value="@collab.Collaborator.Id" selected>@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        } else {
+                                                            <option value="@collab.Collaborator.Id">@collab.Collaborator.FirstName @collab.Collaborator.LastName</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="text-right">
+                                                <input type="hidden" name="todoName" value="@todoItem.Name"/>
+                                                <input type="hidden" name="todoId" value="@todoItem.Id"/>
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="uncheck">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                                
+                                                <button type="submit" class="btn btn-default btn-xs" asp-page-handler="delete">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                            </form>
+                                        </tr>
+                                        }
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title"><span class="label label-success">Owner</span> <span class="label label-info">Collaborator</span></h5>
+                </div>
+                <div class="panel-body">
+                    <p><span class="label label-success">@todoList.Owner.FirstName @todoList.Owner.LastName</span>
+                        @foreach (var collab in todoList.Collaborators)
+                        {
+                            <span class="label label-info">@collab.Collaborator.FirstName @collab.Collaborator.LastName</span>
+                        }
+                    </p>
+                    <form class="form-inline" method="post">
+                        <input type="email" class="form-control" placeholder="Email" name="email">
+                        <input type="hidden" value="@todoList.Id" name="listId" />
+                        <button type="submit" class="btn btn-default btn-s" asp-page-handler="addCollab">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    
+</div>
