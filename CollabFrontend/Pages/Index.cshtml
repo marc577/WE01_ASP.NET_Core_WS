@@ -97,15 +97,19 @@
                                             }
                                             
                                             <td>
-                                                <select class="form-control selectpicker" id="exampleFormControlSelect1" name="workerId" >
+                                                <select class="form-control selectpicker" id="@todoList.OwnerID" name="workerId" >
                                                     @if (todoItem.WorkerID == null) 
                                                     {
                                                         <option value="0">no worker</option>
                                                     } else {
                                                         <option value="0" selected>no worker</option>
                                                     }
-                                                    
-                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    }
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
                                                         @if (collab.Collaborator.Id == todoItem.WorkerID)
@@ -180,7 +184,12 @@
                                                     } else {
                                                         <option value="0" selected>no worker</option>
                                                     }
-                                                    <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    @if (todoItem.WorkerID == null) 
+                                                    {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    }
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
                                                         @if (collab.Collaborator.Id == todoItem.WorkerID)

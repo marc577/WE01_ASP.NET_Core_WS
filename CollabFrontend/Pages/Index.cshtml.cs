@@ -32,6 +32,7 @@ namespace CollabFrontend.Pages
             //var response = client.DownloadString("http://localhost:62548/api/TodoList");
             var releases = JArray.Parse(response);
             todolistList = releases.ToObject<List<TodoList>>();
+            todolistList.Reverse();
             Console.Write(todolistList);
             //response = client.DownloadString("http://localhost:62548/api/TodoItem");
             //releases = JArray.Parse(response);
@@ -68,7 +69,7 @@ namespace CollabFrontend.Pages
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string response = cli.UploadString("http://localhost:62548/api/TodoItem/"+todoId,"PUT", jsonTest);
+            string response = cli.UploadString(API + "TodoItem/"+todoId,"PUT", jsonTest);
 
             return RedirectToPage("/Index");
         }
@@ -85,7 +86,7 @@ namespace CollabFrontend.Pages
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string response = cli.UploadString("http://localhost:62548/api/TodoItem/"+todoId,"PUT", jsonTest);
+            string response = cli.UploadString(API + "TodoItem/"+todoId,"PUT", jsonTest);
 
             return RedirectToPage("/Index");
         }
@@ -94,7 +95,7 @@ namespace CollabFrontend.Pages
             String jsonTest = "{'name': '"+todoName+"','isComplete': false }";
 
             var cli = new WebClient();
-            string response = cli.UploadString("http://localhost:62548/api/TodoItem/"+todoId,"DELETE","");
+            string response = cli.UploadString(API + "TodoItem/"+todoId,"DELETE","");
 
             return RedirectToPage("/Index");
         }
@@ -111,9 +112,9 @@ namespace CollabFrontend.Pages
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string response = cli.UploadString("http://localhost:62548/api/TodoItem/"+todoId,"PUT", jsonTest);
+            string response = cli.UploadString(API + "TodoItem/"+todoId,"PUT", jsonTest);
 
-            return RedirectToPage("/Index");
+            return Page();
         }
 
         public IActionResult OnPostCreateList (String listName) {
@@ -121,7 +122,7 @@ namespace CollabFrontend.Pages
 
             var cli = new WebClient();
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string response = cli.UploadString("http://localhost:62548/api/TodoList","POST", json);
+            string response = cli.UploadString(API + "TodoList","POST", json);
 
             return RedirectToPage("/Index");
         }
