@@ -21,5 +21,16 @@ namespace WebEngineering01_ASP.NetCore.Models
         [ForeignKey("Todolist")]
         public Guid TodoListID { get; set; }
 
-        public virtual TodoList Todolist { get; set; }}
+        public virtual TodoList Todolist { get; set; }
+    }
+
+    [NotMapped]
+    public class CollabRequest
+    {
+        [Required]
+        public virtual Guid TodoListID { get; set; }
+
+        [Required]
+        public virtual string MailAdress { get; set; }
+    }
 }

@@ -73,7 +73,7 @@ namespace CollabTodoListBackend.Controllers
         ///     POST /TodoCollab
         ///     {
         ///        "TodoListID": "listID",
-        ///        "CollaboratorID": ownerID
+        ///        "MailAdress": "mailadresse"
         ///     }
         ///
         /// </remarks>
@@ -86,22 +86,23 @@ namespace CollabTodoListBackend.Controllers
         [ProducesResponseType(typeof(TodoItem), 204)]
         [ProducesResponseType(typeof(TodoItem), 400)]
         [ProducesResponseType(typeof(TodoItem), 404)]
-        public IActionResult Create([FromBody] TodoListUser user)
+        public IActionResult Create([FromBody] CollabRequest collabRequest)
         {
             
-            if (user == null)
+            if (collabRequest == null)
             {
                 return BadRequest();
             }
-            var list = _context.TodoList.First(l => l.Id.Equals(user.TodoListID));
+            var list = _context.TodoList.First(l => l.Id.Equals(collabRequest.TodoListID));
             if(list == null){
                 return NotFound();
             }
-            var fUser = _context.User.First(u => u.Id.Equals(user.CollaboratorID));
+            var fUser = _context.User.First(u => u.MailAdress.Equals(collabRequest.MailAdress));
             if(fUser == null){
                 return NotFound();
             }
-            list.Collaborators.Add(user);
+            var Col = new TodoListUser() { TodoListID = collabRequest.TodoListID, CollaboratorID = fUser.Id };
+            list.Collaborators.Add(Col);
 
             //fUser.Lists.Add(user);
             _context.SaveChanges();

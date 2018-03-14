@@ -38,4 +38,5 @@ namespace WebEngineering01_ASP.NetCore.Models
         [Required]
         public virtual string Password { get; set; }
     }
+
 }
