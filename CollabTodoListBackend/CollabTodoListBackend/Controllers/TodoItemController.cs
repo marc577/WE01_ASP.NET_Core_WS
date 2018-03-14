@@ -112,7 +112,7 @@ namespace TodoApi.Controllers
             todoItem.Name = item.Name;
             todoItem.Until = item.Until;
 
-            if(item.WorkerID != null){
+            if(!item.WorkerID.Equals(Guid.Empty)){
                 var l = _context.TodoList.Find(todoItem.ListID);
                 if(item.WorkerID.Equals(l.OwnerID)){
                     var fuse = _context.User.Find(l.OwnerID);
@@ -133,10 +133,9 @@ namespace TodoApi.Controllers
                         }
                     }
                 }
-            }else if(item.WorkerID.ToString().StartsWith("00000")){
+            }else {
                 todoItem.Worker = null;
                 todoItem.WorkerID = Guid.Empty;
-                //todoItem.WorkerID = new Guid("00000000 - 0000 - 0000 - 0000 - 000000000000");
             }
             _context.TodoItem.Update(todoItem);
             _context.SaveChanges();
