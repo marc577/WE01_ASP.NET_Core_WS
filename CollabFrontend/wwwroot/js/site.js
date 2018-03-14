@@ -1,0 +1,89 @@
+﻿// Write your Javascript code.
+$(function() {
+
+    $('#login-form-link').click(function(e) {
+    	$("#login-form").delay(100).fadeIn(100);
+ 		$("#register-form").fadeOut(100);
+		$('#register-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
+	});
+	$('#register-form-link').click(function(e) {
+		$("#register-form").delay(100).fadeIn(100);
+ 		$("#login-form").fadeOut(100);
+		$('#login-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
+	});
+
+});
+
+(function() {
+    $('#login-form input').keyup(function() {
+
+        var empty = false;
+        $('#login-form input').each(function() {
+            if ($(this).val() == '') {
+                empty = true;
+            }
+        });
+
+        if (empty) {
+            $('#login-submit').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+            $('#login-submit').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+	});
+	
+	$('#register-form input').keyup(function() {
+
+        var empty = false;
+        $('#register-form input').each(function() {
+            if ($(this).val() == '') {
+                empty = true;
+            }
+        });
+
+        if($("#password-register").val().valueOf() == $("#confirm-password").val().valueOf() && $("#password-register").val().valueOf()!=="") {
+            empty = false;
+        } else if($("#password-register").val().valueOf() != $("#confirm-password").val().valueOf()) {
+            $("#message").html("Passwörter stimmen nicht überein");
+            empty = true;
+        } else if($("#password-register").val().valueOf()=="") {
+            $("#message").html("");
+            empty = true;
+        }
+
+        if (empty) {
+            $('#register-submit').attr('disabled', 'disabled');
+        } else {
+            $('#register-submit').removeAttr('disabled');
+        }
+	});
+	
+	$('.newlistitemname').keyup(function() {
+        var empty = false;
+		if ($(this).val() == '') {
+			empty = true;
+        }
+
+        if (empty) {
+            $('.createNewItem').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+            $('.createNewItem').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+	});
+	
+	$('#newListName').keyup(function() {
+        var empty = false;
+		if ($("#newListName").val() == '') {
+			empty = true;
+		}
+
+        if (empty) {
+            $('#createNewListButton').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+            $('#createNewListButton').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+    });
+})()
