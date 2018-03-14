@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TodoApi.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class TodoListController : Controller

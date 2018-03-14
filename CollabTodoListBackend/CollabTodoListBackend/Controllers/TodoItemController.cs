@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TodoApi.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class TodoItemController : Controller
@@ -131,8 +133,11 @@ namespace TodoApi.Controllers
                         }
                     }
                 }
+            }else if(item.WorkerID.ToString().StartsWith("00000")){
+                todoItem.Worker = null;
+                todoItem.WorkerID = Guid.Empty;
+                //todoItem.WorkerID = new Guid("00000000 - 0000 - 0000 - 0000 - 000000000000");
             }
-
             _context.TodoItem.Update(todoItem);
             _context.SaveChanges();
             return new OkObjectResult(todoItem);
