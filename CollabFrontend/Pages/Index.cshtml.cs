@@ -114,7 +114,7 @@ namespace CollabFrontend.Pages
             cli.Headers[HttpRequestHeader.ContentType] = "application/json";
             string response = cli.UploadString(API + "TodoItem/"+todoId,"PUT", jsonTest);
 
-            return Page();
+            return RedirectToPage("/Index");
         }
 
         public IActionResult OnPostCreateList (String listName) {

@@ -104,11 +104,11 @@
                                                     } else {
                                                         <option value="0" selected>no worker</option>
                                                     }
-                                                    @if (todoItem.WorkerID == null) 
+                                                    @if (todoItem.WorkerID == todoList.OwnerID) 
                                                     {
-                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
-                                                    } else {
                                                         <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     }
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
@@ -184,7 +184,7 @@
                                                     } else {
                                                         <option value="0" selected>no worker</option>
                                                     }
-                                                    @if (todoItem.WorkerID == null) 
+                                                    @if (todoItem.WorkerID == todoList.OwnerID) 
                                                     {
                                                         <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     } else {
