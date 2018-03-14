@@ -9,19 +9,6 @@ namespace CollabTodoListBackend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TodoList",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    OwnerID = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TodoList", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -34,6 +21,25 @@ namespace CollabTodoListBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TodoList",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    OwnerID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TodoList", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TodoList_User_OwnerID",
+                        column: x => x.OwnerID,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,6 +95,11 @@ namespace CollabTodoListBackend.Migrations
                 column: "TodoListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TodoList_OwnerID",
+                table: "TodoList",
+                column: "OwnerID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TodoListUser_TodoListID",
                 table: "TodoListUser",
                 column: "TodoListID");
@@ -103,10 +114,10 @@ namespace CollabTodoListBackend.Migrations
                 name: "TodoListUser");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "TodoList");
 
             migrationBuilder.DropTable(
-                name: "TodoList");
+                name: "User");
         }
     }
 }

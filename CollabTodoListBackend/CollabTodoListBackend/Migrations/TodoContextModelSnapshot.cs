@@ -57,6 +57,8 @@ namespace CollabTodoListBackend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerID");
+
                     b.ToTable("TodoList");
                 });
 
@@ -100,6 +102,14 @@ namespace CollabTodoListBackend.Migrations
                     b.HasOne("WebEngineering01_ASP.NetCore.Models.TodoList")
                         .WithMany("TodoItems")
                         .HasForeignKey("TodoListId");
+                });
+
+            modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoList", b =>
+                {
+                    b.HasOne("WebEngineering01_ASP.NetCore.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoListUser", b =>

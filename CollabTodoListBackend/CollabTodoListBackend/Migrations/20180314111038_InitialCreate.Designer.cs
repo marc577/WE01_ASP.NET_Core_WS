@@ -12,7 +12,7 @@ using WebEngineering01_ASP.NetCore.Models;
 namespace CollabTodoListBackend.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20180309161225_InitialCreate")]
+    [Migration("20180314111038_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,8 @@ namespace CollabTodoListBackend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerID");
+
                     b.ToTable("TodoList");
                 });
 
@@ -101,6 +103,14 @@ namespace CollabTodoListBackend.Migrations
                     b.HasOne("WebEngineering01_ASP.NetCore.Models.TodoList")
                         .WithMany("TodoItems")
                         .HasForeignKey("TodoListId");
+                });
+
+            modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoList", b =>
+                {
+                    b.HasOne("WebEngineering01_ASP.NetCore.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebEngineering01_ASP.NetCore.Models.TodoListUser", b =>
