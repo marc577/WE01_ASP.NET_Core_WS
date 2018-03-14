@@ -97,12 +97,12 @@
                                             }
                                             
                                             <td>
-                                                <select class="form-control selectpicker" id="@todoList.OwnerID" name="workerId" >
+                                                <select class="form-control selectpicker" name="workerId" >
                                                     @if (todoItem.WorkerID == null) 
                                                     {
-                                                        <option value="0">no worker</option>
+                                                        <option value="00000000-0000-0000-0000-000000000000">no worker</option>
                                                     } else {
-                                                        <option value="0" selected>no worker</option>
+                                                        <option value="00000000-0000-0000-0000-000000000000" selected>no worker</option>
                                                     }
                                                     @if (todoItem.WorkerID == todoList.OwnerID) 
                                                     {
@@ -180,9 +180,9 @@
                                                 <select class="form-control selectpicker" name="workerId" >
                                                     @if (todoItem.WorkerID == null) 
                                                     {
-                                                        <option value="0">no worker</option>
+                                                        <option value="00000000-0000-0000-0000-000000000000">no worker</option>
                                                     } else {
-                                                        <option value="0" selected>no worker</option>
+                                                        <option value="00000000-0000-0000-0000-000000000000" selected>no worker</option>
                                                     }
                                                     @if (todoItem.WorkerID == todoList.OwnerID) 
                                                     {

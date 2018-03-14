@@ -102,9 +102,7 @@ namespace CollabFrontend.Pages
 
         public IActionResult OnPostEditItem (String todoId, String todoName, String todoDate, String workerId) {
             String jsonTest = "{ ";
-            if (workerId != "0") {
-                jsonTest = jsonTest + "'workerID': '"+workerId+"',";
-            }
+            jsonTest = jsonTest + "'workerID': '"+workerId+"',";
             if(todoDate != null) {
                 jsonTest = jsonTest +"'until': '"+todoDate+"',";
             }
