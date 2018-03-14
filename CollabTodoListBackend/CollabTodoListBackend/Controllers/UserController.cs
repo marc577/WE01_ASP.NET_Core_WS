@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TodoApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
 

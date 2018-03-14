@@ -9,7 +9,7 @@ using WebEngineering01_ASP.NetCore.Models;
 
 namespace CollabTodoListBackend.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Produces("application/json")]
     [Route("api/TodoCollab")]
     public class TodoCollabController : Controller
