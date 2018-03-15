@@ -15,7 +15,6 @@ namespace CollabFrontend.Pages
     public class IndexModel : PageModel
     {
         private string API = "http://localhost:62548/api/";
-        private string jwt;
 
         [BindProperty]
         public TodoItem newListItem { get; set; }
@@ -27,7 +26,7 @@ namespace CollabFrontend.Pages
             todolistList = new List<TodoList>();
         }
         public void OnGet() {
-            jwt = HttpContext.Session.GetString("token");
+            var jwt = HttpContext.Session.GetString("token");
             if(jwt != null){
                 writeMessage(jwt);
             }else{
@@ -74,6 +73,7 @@ namespace CollabFrontend.Pages
                 TodoItem todoItem = new TodoItem{ListID=new Guid(listId),Name=todoText,Until=parsed,WorkerID=new Guid(workerId)};
                 String json = JsonConvert.SerializeObject(todoItem);
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization(json,"TodoItem","POST",jwt);
                 }catch(WebException e){
                     var response = e.Response as HttpWebResponse;
@@ -98,13 +98,14 @@ namespace CollabFrontend.Pages
                 Request request = new Request();
                 try {
                     parsed = DateTime.ParseExact(todoDate, "yyyy-MM-ddTHH:mm", System.Globalization.CultureInfo.InvariantCulture);
-                } catch(System.FormatException) {
+                } catch(Exception) {
                     parsed = new DateTime();
                 } 
                 TodoItem todoItem = new TodoItem(){Name=todoName,Id=new Guid(todoId),Until=parsed,WorkerID=new Guid(workerId),IsComplete=true};
             
                 String json = JsonConvert.SerializeObject(todoItem);
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization(json,"TodoItem/"+todoId,"PUT",jwt);
                 }catch(WebException e){
                     var response = e.Response as HttpWebResponse;
@@ -139,6 +140,7 @@ namespace CollabFrontend.Pages
             
                 String json = JsonConvert.SerializeObject(todoItem);
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization(json,"TodoItem/"+todoId,"PUT",jwt);
                 }catch(WebException e){
                     var response = e.Response as HttpWebResponse;
@@ -162,6 +164,7 @@ namespace CollabFrontend.Pages
             if(userID != null){
                 Request request = new Request();
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization("","TodoItem/"+todoId,"DELETE",jwt);
                 }catch(WebException e){
                     var response = e.Response as HttpWebResponse;
@@ -201,6 +204,7 @@ namespace CollabFrontend.Pages
                 String json = JsonConvert.SerializeObject(todoList);
                 Request request = new Request();
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization(json,"TodoList","POST",jwt);
                     
                 } catch(WebException e) {
@@ -223,6 +227,7 @@ namespace CollabFrontend.Pages
             if(userID != null){
                 Request request = new Request();
                 try{
+                    var jwt =  HttpContext.Session.GetString("token");
                     String response = request.RequestUploadWithAuthorization("","TodoList/"+listId,"Delete",jwt);
                     
                 } catch(WebException e) {
