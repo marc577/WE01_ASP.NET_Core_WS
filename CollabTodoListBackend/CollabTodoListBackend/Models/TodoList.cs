@@ -16,7 +16,6 @@ namespace WebEngineering01_ASP.NetCore.Models
             TodoItems = new List<TodoItem>();
             Collaborators = new List<TodoListUser>();
         }
-        
 
         public virtual Guid Id { get; set; }
 
@@ -29,12 +28,8 @@ namespace WebEngineering01_ASP.NetCore.Models
 
         public virtual User Owner { get; set; }
 
-
-        //[DefaultValue(List<TodoItem>)]
         public virtual ICollection<TodoItem> TodoItems { get; set; }
 
-
-        //[DefaultValue(null)]
-        public virtual ICollection<TodoListUser> Collaborators { get; } = new List<TodoListUser>();
+        public virtual ICollection<TodoListUser> Collaborators { get; set; }
     }
 }
