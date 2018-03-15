@@ -4,6 +4,7 @@ using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TodoApi.Controllers
 {
@@ -19,6 +20,20 @@ namespace TodoApi.Controllers
             _context = context;
         }
 
+        private bool isOwner(TodoList list)
+        {
+            if (list == null) return false;
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if (list.OwnerID.ToString().Equals(guidstring))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Returns a TodoList.
@@ -45,8 +60,10 @@ namespace TodoApi.Controllers
                     }
                 }
             }
-            //item.Owner = _context.User.FirstOrDefault(e => e.Id.Equals(item.OwnerID));
-            return new ObjectResult(item);
+            if(isOwner(item)){
+                return new ObjectResult(item);
+            }
+            return Unauthorized();
         }
 
         /// <summary>
@@ -114,13 +131,15 @@ namespace TodoApi.Controllers
                 return NotFound();
             }
 
-            todoList.Name = item.Name;
-            //todoList.TodoItems = item.TodoItems;
-            //todoList.Collaborators = item.Collaborators;
+            if(isOwner(todoList)){
+                todoList.Name = item.Name;
 
-            _context.TodoList.Update(todoList);
-            _context.SaveChanges();
-            return new OkObjectResult(todoList);
+                _context.TodoList.Update(todoList);
+                _context.SaveChanges();
+                return new OkObjectResult(todoList);
+            }
+            return Unauthorized();
+
         }
 
         /// <summary>
@@ -138,9 +157,13 @@ namespace TodoApi.Controllers
                 return NotFound();
             }
 
-            _context.TodoList.Remove(todoList);
-            _context.SaveChanges();
-            return new NoContentResult();
+            if(isOwner(todoList)){
+                _context.TodoList.Remove(todoList);
+                _context.SaveChanges();
+                return new NoContentResult();
+            }
+            return Unauthorized();
+
         }
     }
 }

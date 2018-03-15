@@ -4,10 +4,12 @@ using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TodoApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class TodoItemController : Controller
@@ -17,6 +19,25 @@ namespace TodoApi.Controllers
         public TodoItemController(TodoContext context)
         {
             _context = context;
+        }
+
+        private bool isUserOrCollab(TodoList list){
+            if (list == null) return false;
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if (list.OwnerID.ToString().Equals(guidstring))
+                {
+                    return true;
+                }else{
+                    var collab = list.Collaborators.FirstOrDefault(col => (col.CollaboratorID.ToString().Equals(guidstring) && col.TodoListID.Equals(list.Id)));
+                    if(collab != null){
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
 
@@ -35,7 +56,11 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-            return new ObjectResult(item);
+            var list = _context.TodoList.Find(item.ListID);
+            if(isUserOrCollab(list)){
+                return new ObjectResult(item);
+            }
+            return Unauthorized();
         }
 
         /// <summary>
@@ -67,12 +92,17 @@ namespace TodoApi.Controllers
                 return BadRequest();
             }
 
-            _context.TodoItem.Add(item);
             var list = _context.TodoList.FirstOrDefault(e => e.Id.Equals(item.ListID));
-            list.TodoItems.Add(item);
-            _context.SaveChanges();
 
-            return CreatedAtRoute("GetTodoItem", new { id = item.Id }, item);
+            if(isUserOrCollab(list)){
+                _context.TodoItem.Add(item);
+                list.TodoItems.Add(item);
+                _context.SaveChanges();
+
+                return CreatedAtRoute("GetTodoItem", new { id = item.Id }, item);
+            }
+
+            return Unauthorized();
         }
 
         /// <summary>
@@ -108,38 +138,51 @@ namespace TodoApi.Controllers
                 return NotFound();
             }
 
-            todoItem.IsComplete = item.IsComplete;
-            todoItem.Name = item.Name;
-            todoItem.Until = item.Until;
+            var list = _context.TodoList.FirstOrDefault(e => e.Id.Equals(todoItem.ListID));
+            if(isUserOrCollab(list)){
+                todoItem.IsComplete = item.IsComplete;
+                todoItem.Name = item.Name;
+                todoItem.Until = item.Until;
 
-            if(!item.WorkerID.Equals(Guid.Empty)){
-                var l = _context.TodoList.Find(todoItem.ListID);
-                if(item.WorkerID.Equals(l.OwnerID)){
-                    var fuse = _context.User.Find(l.OwnerID);
-                    if (fuse != null)
+                if (!item.WorkerID.Equals(Guid.Empty))
+                {
+                    var l = _context.TodoList.Find(todoItem.ListID);
+                    if (item.WorkerID.Equals(l.OwnerID))
                     {
-                        todoItem.WorkerID = fuse.Id;
-                        todoItem.Worker = fuse;
+                        var fuse = _context.User.Find(l.OwnerID);
+                        if (fuse != null)
+                        {
+                            todoItem.WorkerID = fuse.Id;
+                            todoItem.Worker = fuse;
+                        }
                     }
-                }
-                else if(l != null){
-                    foreach(TodoListUser u in l.Collaborators){
-                        if(u.CollaboratorID.Equals(item.WorkerID)){
-                            var fuse = _context.User.Find(u.CollaboratorID);
-                            if(fuse != null){
-                                todoItem.WorkerID = fuse.Id;
-                                todoItem.Worker = fuse;
+                    else if (l != null)
+                    {
+                        foreach (TodoListUser u in l.Collaborators)
+                        {
+                            if (u.CollaboratorID.Equals(item.WorkerID))
+                            {
+                                var fuse = _context.User.Find(u.CollaboratorID);
+                                if (fuse != null)
+                                {
+                                    todoItem.WorkerID = fuse.Id;
+                                    todoItem.Worker = fuse;
+                                }
                             }
                         }
                     }
                 }
-            }else {
-                todoItem.Worker = null;
-                todoItem.WorkerID = Guid.Empty;
+                else
+                {
+                    todoItem.Worker = null;
+                    todoItem.WorkerID = Guid.Empty;
+                }
+                _context.TodoItem.Update(todoItem);
+                _context.SaveChanges();
+                return new OkObjectResult(todoItem);   
+            }else{
+                return Unauthorized();
             }
-            _context.TodoItem.Update(todoItem);
-            _context.SaveChanges();
-            return new OkObjectResult(todoItem);
         }
 
         /// <summary>
@@ -156,9 +199,15 @@ namespace TodoApi.Controllers
                 return NotFound();
             }
 
-            _context.TodoItem.Remove(todoItem);
-            _context.SaveChanges();
-            return new NoContentResult();
+            var list = _context.TodoList.FirstOrDefault(e => e.Id.Equals(todoItem.ListID));
+            if(isUserOrCollab(list)){
+                _context.TodoItem.Remove(todoItem);
+                _context.SaveChanges();
+                return new NoContentResult();
+            }
+            return Unauthorized();
+
+
         }
     }
 }

@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using WebEngineering01_ASP.NetCore.Models;
-using System;
+﻿using System;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using WebEngineering01_ASP.NetCore.Models;
 
 namespace TodoApi.Controllers
 {
+    [AllowAnonymous]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class LoginController : Controller
@@ -36,15 +33,14 @@ namespace TodoApi.Controllers
         ///
         ///     POST /Login
         ///     {
-        ///        "MailAdress": "mailadress",
-        ///        "Password": ownerID
+        ///        "MailAdress": "mailAdress",
+        ///        "Password": "password"
         ///     }
         ///
         /// </remarks>
         /// <returns>JWT Token</returns>
         /// <response code="200">Returns a JWT</response>
         /// <response code="404">If the user was not found</response>
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult RequestToken([FromBody] UserRequest user)
         {
@@ -79,5 +75,8 @@ namespace TodoApi.Controllers
 
             return BadRequest("Could not verify username and password");
         }
+
+
+
     }
 }

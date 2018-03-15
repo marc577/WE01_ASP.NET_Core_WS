@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebEngineering01_ASP.NetCore.Models
 {
     public class User
-    {
+    {       
         public User(){
-            //Lists = new List<TodoListUser>();
         }
         public virtual Guid Id { get; set; }
 
@@ -26,8 +23,6 @@ namespace WebEngineering01_ASP.NetCore.Models
 
         [Required]
         public virtual string Password { get; set; }
-
-        //public virtual ICollection<TodoListUser> Lists { get; } = new List<TodoListUser>();
     }
 
     [NotMapped]

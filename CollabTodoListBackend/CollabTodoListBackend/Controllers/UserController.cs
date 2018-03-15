@@ -4,10 +4,11 @@ using System.Linq;
 using WebEngineering01_ASP.NetCore.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TodoApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
 
@@ -20,16 +21,21 @@ namespace TodoApi.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Returns all User.
-        /// </summary>
-        /// <returns>All Users</returns>
-        /// <response code="200">Returns all items</response>
-        /*[HttpGet]
-        public IEnumerable<User> GetAll()
+        private bool isUser(User us)
         {
-            return _context.User.ToList();
-        }*/
+            if (us == null) return false;
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if (us.Id.ToString().Equals(guidstring))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Returns a User.
@@ -45,7 +51,12 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-            return new ObjectResult(item);
+            if(isUser(item)){
+                item.Password = "*";
+                return new ObjectResult(item);
+            }
+
+            return Unauthorized();
         }
 
         /// <summary>
@@ -66,7 +77,8 @@ namespace TodoApi.Controllers
         /// <param name="item"></param>
         /// <returns>A newly-created User</returns>
         /// <response code="201">Returns the newly-created item</response>
-        /// <response code="400">If the item is null</response> 
+        /// <response code="400">If the item is null</response>
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(TodoItem), 201)]
         [ProducesResponseType(typeof(TodoItem), 400)]
@@ -116,15 +128,17 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-
-            user.LastName = item.LastName;
-            user.MailAdress = item.MailAdress;
-            user.FirstName = item.FirstName;
-            user.Password = item.Password;
-
-            _context.User.Update(user);
-            _context.SaveChanges();
-            return new OkObjectResult(user);
+            if(isUser(user)){
+                user.LastName = item.LastName;
+                user.MailAdress = item.MailAdress;
+                user.FirstName = item.FirstName;
+                user.Password = item.Password;
+                _context.User.Update(user);
+                _context.SaveChanges();
+                user.Password = "*";
+                return new OkObjectResult(user);
+            }
+            return Unauthorized();
         }
 
         /// <summary>
@@ -141,10 +155,12 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-
-            _context.User.Remove(user);
-            _context.SaveChanges();
-            return new NoContentResult();
+            if(isUser(user)){
+                _context.User.Remove(user);
+                _context.SaveChanges();
+                return new NoContentResult();
+            }
+            return Unauthorized();
         }
     }
 }

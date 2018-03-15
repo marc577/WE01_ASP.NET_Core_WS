@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WebEngineering01_ASP.NetCore.Models;
-using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace CollabTodoListBackend.Controllers
@@ -104,18 +102,20 @@ namespace CollabTodoListBackend.Controllers
                 return NotFound();
             }
 
-            //TODO: überprügfen ob schon der Collab drinne ist
-            //TODO: Collabs dürfen auch andere Collabs hinzufügen?
-
             var currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
             {
                 string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
                 if(list.OwnerID.ToString().Equals(guidstring)){
-                    var Col = new TodoListUser() { TodoListID = collabRequest.TodoListID, CollaboratorID = fUser.Id };
-                    list.Collaborators.Add(Col);
-                    _context.SaveChanges();
-                    return new NoContentResult();
+
+                    try{
+                        var Col = new TodoListUser() { TodoListID = collabRequest.TodoListID, CollaboratorID = fUser.Id };
+                        list.Collaborators.Add(Col);
+                        _context.SaveChanges();
+                        return new NoContentResult();
+                    }catch(InvalidOperationException ex){
+                        return BadRequest(ex.Message);
+                    }
                 }
             }
 
@@ -131,7 +131,7 @@ namespace CollabTodoListBackend.Controllers
         ///     POST /TodoCollab
         ///     {
         ///        "TodoListID": "listID",
-        ///        "CollaboratorID": ownerID
+        ///        "CollaboratorID": "collabID"
         ///     }
         ///
         /// </remarks>
@@ -160,13 +160,25 @@ namespace CollabTodoListBackend.Controllers
                 return NotFound();
             }
 
+
             var collaberator = _context.TodoListUser.Find(user.CollaboratorID, user.TodoListID);
-            if(collaberator == null){
+            if (collaberator == null)
+            {
                 return NotFound();
             }
-            list.Collaborators.Remove(collaberator);
-            _context.SaveChanges();
-            return new NoContentResult();
+
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if(list.OwnerID.ToString().Equals(guidstring)){
+                    list.Collaborators.Remove(collaberator);
+                    _context.SaveChanges();
+                    return new NoContentResult();
+                }
+            }
+
+            return BadRequest();
         }
     }
 }
