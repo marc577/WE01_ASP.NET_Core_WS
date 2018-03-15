@@ -13,48 +13,60 @@ using Microsoft.AspNetCore.Http;
 namespace CollabFrontend.Pages {
     public class LoginModel : PageModel {
 
-        private string API = "http://localhost:62548/api/";
-
+        [BindProperty]
         public User newCreatedUser  { get; set; }
 
         public void OnGet() {
-        }
-
-        private void writeMessage() {
             
         }
 
         public IActionResult OnPostLogin(String email, String password) {
 
-            var cli = new WebClient();
-            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
             var userR = new UserRequest(){MailAdress = email, Password = password};
             var json = JsonConvert.SerializeObject(userR);
 
-            String response = cli.UploadString(API + "Login","POST", json);
-            var ob = JObject.Parse(response);
-
-            HttpContext.Session.SetString("token", "Bearer "+ ob.GetValue("token").ToString());
-            HttpContext.Session.SetString("user",ob.GetValue("userID").ToString());
-
+            Request request = new Request();
+            
+            try {
+                String response = request.RequestWithoutAuthorization(json,"Login","POST");
+                var ob = JObject.Parse(response);
+                HttpContext.Session.SetString("token", "Bearer "+ ob.GetValue("token").ToString());
+                HttpContext.Session.SetString("user",ob.GetValue("userID").ToString());
+            } catch (WebException e) {
+                var response = e.Response as HttpWebResponse;
+                if (response != null) {
+                    if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                        Response.Redirect("Login");
+                    }
+                    if(response.StatusCode.Equals(HttpStatusCode.InternalServerError)) {
+                        Response.Redirect("Login");
+                    }
+                }
+            }
+            
             return RedirectToPage("/Index");
         }
 
-        public IActionResult OnPostRegistrate(String email, String firstname, String lastname, String password) {
-            User user = new User();
-            user.LastName = "lastname";
-            user.FirstName = "firstname";
-            user.Password = "neu";
-            user.MailAdress = "email@email.com";
-            String json = JsonConvert.SerializeObject(user);
+        public IActionResult OnPostRegistrate() {
+            var json = JsonConvert.SerializeObject(newCreatedUser);
 
-            Console.WriteLine(json);
+            Request request = new Request();
 
-            //String jsonTest = "{ 'lastName': '"+lastname+"', 'firstName': '"+firstname+"', 'mailAdress' : '"+email+"','password' : '"+password+"'}";
-
-            var cli = new WebClient();
-            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            String response = cli.UploadString(API + "User","POST", json);
+            try {
+                String response = request.RequestWithoutAuthorization(json,"User","POST");
+                
+                return OnPostLogin(newCreatedUser.MailAdress, newCreatedUser.Password);
+            } catch (WebException e) {
+                var response = e.Response as HttpWebResponse;
+                if (response != null) {
+                    if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                        Response.Redirect("Login");
+                    }
+                    if(response.StatusCode.Equals(HttpStatusCode.InternalServerError)) {
+                        Response.Redirect("Login");
+                    }
+                }
+            }
 
             return Page();
         }
