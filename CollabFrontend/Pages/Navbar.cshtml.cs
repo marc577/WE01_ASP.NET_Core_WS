@@ -10,6 +10,10 @@ namespace CollabFrontend.Pages
     {
         public string Message { get; set; }
 
+        public NavbarModel():base(){
+             Message = "Your application description page.";
+        }
+
         public void OnGet()
         {
             Message = "Your application description page.";
