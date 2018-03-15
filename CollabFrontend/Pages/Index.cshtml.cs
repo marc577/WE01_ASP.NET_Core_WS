@@ -14,16 +14,17 @@ namespace CollabFrontend.Pages
 {
     public class IndexModel : PageModel
     {
-        private string API = "http://localhost:62548/api/";
 
         [BindProperty]
         public TodoItem newListItem { get; set; }
 
         public List<TodoList> todolistList  { get; set; }
+        public String currentUserId { get; set; }
         public String message  { get; set; }
 
         public IndexModel() : base(){
             todolistList = new List<TodoList>();
+            currentUserId = "";
         }
         public void OnGet() {
             var jwt = HttpContext.Session.GetString("token");
@@ -36,7 +37,8 @@ namespace CollabFrontend.Pages
 
         private void writeMessage(string bearer) {
             string userID = HttpContext.Session.GetString("user");
-            if(userID != null){
+            if(userID != null) {
+                currentUserId = userID;
                 Request request = new Request();
                 
                 try{
@@ -67,7 +69,7 @@ namespace CollabFrontend.Pages
                 DateTime parsed;
                 try {
                     parsed = DateTime.ParseExact(todoDate, "yyyy-MM-ddTHH:mm", System.Globalization.CultureInfo.InvariantCulture);
-                } catch(System.FormatException) {
+                } catch(Exception) {
                     parsed = new DateTime();
                 } 
                 TodoItem todoItem = new TodoItem{ListID=new Guid(listId),Name=todoText,Until=parsed,WorkerID=new Guid(workerId)};
@@ -183,16 +185,32 @@ namespace CollabFrontend.Pages
         }
 
         public IActionResult OnPostEditItem (String todoId, String todoName, String todoDate, String workerId) {
-            String jsonTest = "{ ";
-            jsonTest = jsonTest + "'workerID': '"+workerId+"',";
-            if(todoDate != null) {
-                jsonTest = jsonTest +"'until': '"+todoDate+"',";
+            string userID = HttpContext.Session.GetString("user");
+            if(userID != null){
+                Request request = new Request();
+                DateTime parsed;
+                try {
+                    parsed = DateTime.ParseExact(todoDate, "yyyy-MM-ddTHH:mm", System.Globalization.CultureInfo.InvariantCulture);
+                } catch(Exception) {
+                    parsed = new DateTime();
+                } 
+                TodoItem todoItem = new TodoItem{Name=todoName,Until=parsed,WorkerID=new Guid(workerId)};
+                String json = JsonConvert.SerializeObject(todoItem);
+                try{
+                    var jwt =  HttpContext.Session.GetString("token");
+                    String response = request.RequestUploadWithAuthorization(json,"TodoItem/"+todoId,"PUT",jwt);
+                }catch(WebException e){
+                    var response = e.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                            Response.Redirect("Login");
+                        }
+                    }
+                }
+            }else{
+                Response.Redirect("Login");
             }
-            jsonTest +=  "'name': '"+todoName+"' }";
-
-            var cli = new WebClient();
-            cli.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string response = cli.UploadString(API + "TodoItem/"+todoId,"PUT", jsonTest);
 
             return RedirectToPage("/Index");
         }
@@ -247,7 +265,60 @@ namespace CollabFrontend.Pages
         }
 
         public IActionResult OnPostAddCollab (String listId, String email) {
-        
+            string userID = HttpContext.Session.GetString("user");
+            if(userID != null){
+                Request request = new Request();
+                try{
+                    String json = "{'TodoListID': '"+listId+"', 'MailAdress': '"+email+"'}";
+                    var jwt =  HttpContext.Session.GetString("token");
+                    String response = request.RequestUploadWithAuthorization(json,"TodoCollab","POST",jwt);
+                    
+                } catch(WebException e) {
+                    var response = e.Response as HttpWebResponse;
+                    if (response != null) {
+                        if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                            Response.Redirect("Login");
+                        }
+                        if(response.StatusCode.Equals(HttpStatusCode.NotFound)){
+                            Response.Redirect("Index");
+                        }
+                        if(response.StatusCode.Equals(HttpStatusCode.BadRequest)){
+                            Response.Redirect("Index");
+                        }
+                    }
+                }
+            } else {
+                RedirectToPage("/Login");
+            }
+            return RedirectToPage("/Index");
+        }
+
+        public IActionResult OnPostRemoveCollab (String collabId, String listId) {
+            string userID = HttpContext.Session.GetString("user");
+            if(userID != null){
+                Request request = new Request();
+                try{
+                    String json = "{'TodoListID': '"+listId+"', 'CollaboratorID': '"+collabId+"'}";
+                    var jwt =  HttpContext.Session.GetString("token");
+                    String response = request.RequestUploadWithAuthorization(json,"TodoCollab","DELETE",jwt);
+                    
+                } catch(WebException e) {
+                    var response = e.Response as HttpWebResponse;
+                    if (response != null) {
+                        if(response.StatusCode.Equals(HttpStatusCode.Unauthorized)){
+                            Response.Redirect("Login");
+                        }
+                        if(response.StatusCode.Equals(HttpStatusCode.NotFound)){
+                            Response.Redirect("Index");
+                        }
+                        if(response.StatusCode.Equals(HttpStatusCode.BadRequest)){
+                            Response.Redirect("Index");
+                        }
+                    }
+                }
+            } else {
+                RedirectToPage("/Login");
+            }
             return RedirectToPage("/Index");
         }
     }

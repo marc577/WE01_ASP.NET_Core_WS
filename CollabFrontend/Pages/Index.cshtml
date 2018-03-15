@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "Collaborated To Do List";
 }
@@ -63,7 +64,7 @@
                                         <tr>
                                             <form method="post" id="index-form">
                                             <td><input type="text" class="form-control newlistitemname" asp-for="newListItem.Name" name="todoText" /></td>
-                                            <td><input type="datetime-local" value="0" class="form-control" name="todoDate" /></td>
+                                            <td><input type="datetime-local" value="0001-01-01T00:00" class="form-control" name="todoDate" /></td>
                                             <td>
                                                 <select class="form-control" id="exampleFormControlSelect1" name="workerId">
                                                     <option value="00000000-0000-0000-0000-000000000000">no worker</option>
@@ -91,7 +92,7 @@
                                             <td><input type="text" value="@todoItem.Name" name="todoName" class="form-control" /></td>
                                             @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
                                             {
-                                                <td><input type="datetime-local" class="form-control" name="todoDate"class="form-control"/></td>
+                                                <td><input type="datetime-local" class="form-control" name="todoDate"class="form-control" /></td>
                                             } else {
                                                 <td><input type="datetime-local" class="form-control" class="form-control" value="@todoItem.Until.ToString("yyyy-MM-ddTHH:mm")" name="todoDate"/></td>
                                             }
@@ -171,7 +172,7 @@
                                             <td><input class="form-control" type="text" value="@todoItem.Name" name="todoName" disabled/></td>
                                             @if (todoItem.Until.ToString("yyyy-MM-ddTHH:mm") == "0001-01-01T00:00") 
                                             {
-                                                <td><input type="datetime-local" name="todoDate" disabled class="form-control"/></td>
+                                                <td><input type="datetime-local" name="todoDate" value="0001-01-01T00:00" disabled class="form-control"/></td>
                                             } else {
                                                 <td><input type="datetime-local" class="form-control" disabled value="@todoItem.Until.ToString("yyyy-MM-ddThh:mm")" name="todoDate"/></td>
                                             }
@@ -227,13 +228,15 @@
                 <div class="panel-heading">
                     <h5 class="panel-title"><span class="label label-success">Owner</span> <span class="label label-info">Collaborator</span></h5>
                 </div>
-                <div class="panel-body">
-                    <p><span class="label label-success">@todoList.Owner.FirstName @todoList.Owner.LastName</span>
+                <div class="panel-body clearfix">
+                    <p class="pull-left"><span class="label label-success">@todoList.Owner.FirstName @todoList.Owner.LastName</span>
                         @foreach (var collab in todoList.Collaborators)
                         {
-                            <span class="label label-info">@collab.Collaborator.FirstName @collab.Collaborator.LastName</span>
+                            <form method="POST" class="form-inline"><span class="label label-info">@collab.Collaborator.FirstName @collab.Collaborator.LastName<input type="hidden" name="collabId" value="@collab.Collaborator.Id" /><input type="hidden" name="listId" value="@todoList.Id" /><button type="submit" class="no-style" asp-page-handler="removeCollab">x</button></span></form>
                         }
                     </p>
+                    @if(todoList.OwnerID == new Guid(Model.currentUserId)) {
+
                     <form class="form-inline" method="post">
                         <input type="email" class="form-control" placeholder="Email" name="email">
                         <input type="hidden" value="@todoList.Id" name="listId" />
@@ -241,6 +244,8 @@
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </form>
+                    }
+                    
                 </div>
             </div>
         </div>

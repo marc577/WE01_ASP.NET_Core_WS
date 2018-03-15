@@ -124,3 +124,12 @@ body {
 	background-color: #1CA347;
 	border-color: #1CA347;
 }
+
+.no-style {
+	border: none;
+	background: none;
+}
+
+.inline-style {
+	display: inline;
+}
