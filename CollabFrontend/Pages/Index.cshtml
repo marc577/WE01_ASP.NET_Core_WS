@@ -23,7 +23,6 @@
 
     @foreach (var todoList in Model.todolistList)
     {
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -251,5 +250,11 @@
         </div>
     </div>
     }
+    @if (Model.todolistList.Count == 0) {
+        <div class="alert alert-warning" role="alert">
+            No List available
+        </div>
+    }
+    
     
 </div>
