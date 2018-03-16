@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace TodoApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class TodoListController : Controller
