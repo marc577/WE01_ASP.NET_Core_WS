@@ -105,8 +105,7 @@ namespace TodoApi.Controllers
         ///     {
         ///        "lastName": "Last",
         ///        "FirstName": "First",
-        ///        "mailAdress" : "first@last.tld",
-        ///        "password" : "SafePass"
+        ///        "mailAdress" : "first@last.tld"
         ///     }
         ///
         /// </remarks>
@@ -116,9 +115,9 @@ namespace TodoApi.Controllers
         /// <response code="400">If the item is null</response>
         /// <response code="404">If the id was not found</response>
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] User item)
+        public IActionResult Update(Guid id, [FromBody] UserChangeRequest item)
         {
-            if (item == null || item.Password == null)
+            if (item == null)
             {
                 return BadRequest();
             }
@@ -132,11 +131,49 @@ namespace TodoApi.Controllers
                 user.LastName = item.LastName;
                 user.MailAdress = item.MailAdress;
                 user.FirstName = item.FirstName;
-                user.Password = item.Password;
                 _context.User.Update(user);
                 _context.SaveChanges();
-                user.Password = "*";
-                return new OkObjectResult(user);
+                return new OkObjectResult(item);
+            }
+            return Unauthorized();
+        }
+
+        /// <summary>
+        /// Chanegs a users password.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PATCH /User
+        ///     {
+        ///        "newpass" : "newpassword"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <response code="200">If the item was successfully updated</response>
+        /// <response code="400">If the item is null</response>
+        /// <response code="404">If the id was not found</response>
+        [HttpPatch("{id}")]
+        public IActionResult ChangePW(Guid id, [FromBody] PasswordChangeRequest item)
+        {
+            if (item == null || item.newPassword == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _context.User.FirstOrDefault(t => t.Id.Equals(id));
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (isUser(user))
+            {
+                user.Password = item.newPassword;
+                _context.User.Update(user);
+                _context.SaveChanges();
+                return new OkResult();
             }
             return Unauthorized();
         }

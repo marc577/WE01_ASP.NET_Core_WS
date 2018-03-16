@@ -26,6 +26,20 @@ namespace WebEngineering01_ASP.NetCore.Models
     }
 
     [NotMapped]
+    public class UserChangeRequest
+    {
+
+        [Required]
+        public virtual string LastName { get; set; }
+
+        [Required]
+        public virtual string FirstName { get; set; }
+
+        [Required]
+        public virtual string MailAdress { get; set; }
+    }
+
+    [NotMapped]
     public class UserRequest {
         [Required]
         public virtual string MailAdress { get; set; }
@@ -33,5 +47,14 @@ namespace WebEngineering01_ASP.NetCore.Models
         [Required]
         public virtual string Password { get; set; }
     }
+
+    [NotMapped]
+    public class PasswordChangeRequest
+    {
+        [Required]
+        public virtual string newPassword { get; set; }
+
+    }
+
 
 }
