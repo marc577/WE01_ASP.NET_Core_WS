@@ -29,9 +29,9 @@ $(function() {
         });
 
         if (empty) {
-            $('#login-submit').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#login-submit').attr('disabled', 'disabled'); 
         } else {
-            $('#login-submit').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#login-submit').removeAttr('disabled'); 
         }
 	});
 	
@@ -46,6 +46,7 @@ $(function() {
 
         if($("#password-register").val().valueOf() == $("#confirm-password").val().valueOf() && $("#password-register").val().valueOf()!=="") {
             empty = false;
+            $("#message").html("");
         } else if($("#password-register").val().valueOf() != $("#confirm-password").val().valueOf()) {
             $("#message").html("Passwörter stimmen nicht überein");
             empty = true;
@@ -68,9 +69,9 @@ $(function() {
         }
 
         if (empty) {
-            $('.createNewItem').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('.createNewItem').attr('disabled', 'disabled'); 
         } else {
-            $('.createNewItem').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('.createNewItem').removeAttr('disabled'); 
         }
 	});
 	
@@ -81,9 +82,41 @@ $(function() {
 		}
 
         if (empty) {
-            $('#createNewListButton').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#save_button').attr('disabled', 'disabled'); 
         } else {
-            $('#createNewListButton').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+            $('#save_button').removeAttr('disabled'); 
+        }
+    });
+
+    $('#contact-form-input input').keyup(function() {
+        var empty = false;
+
+        if($("#email-contact").val().valueOf() == '') {
+            empty = true;
+        } else if($("#firstname-contact").val().valueOf() == '') {
+            empty = true;
+        } else if($("#lastname-contact").val().valueOf() == '') {
+            empty = true;
+        }
+
+        if (empty) {
+            $('#save_button').attr('disabled', 'disabled');
+        } else {
+            $('#save_button').removeAttr('disabled'); 
+        }
+    });
+
+    $('#contact-password-input input').keyup(function() {
+        var empty = false;
+
+        if ($("#password-contact").val().valueOf() != $("#confirm-password-contact").val().valueOf()) {
+            empty = true;
+        }
+
+        if (empty) {
+            $('#changePassword').attr('disabled', 'disabled');
+        } else {
+            $('#changePassword').removeAttr('disabled'); 
         }
     });
 })()

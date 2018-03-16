@@ -5,24 +5,24 @@
 @using Newtonsoft.Json.Linq;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
-    var test = HttpContextAccessor.HttpContext.Session.GetString("user");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("user");
     var token = HttpContextAccessor.HttpContext.Session.GetString("token");
     Request request = new Request();
-    String response = "{}";
+    String response;
     try {
-         response = request.RequestDownloadWithAuthorization("User/"+test,token);
+         response = request.RequestDownloadWithAuthorization("User/"+userId,token);
     } catch (Exception) {
-
+        response = "{}";
     } 
     var ob = JObject.Parse(response);
     User user = ob.ToObject<User>();
 }
 
-@if(test == null ) {
+@if(userId == null) {
     <li><a asp-page="/Login">Login</a></li>
 } else {
     <li><a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
+    <li><a asp-page="/Contact">@user.FirstName @user.LastName</a></li>
     <li><a asp-page="/Logout">Logout</a></li>
-    <li><a>@user.FirstName @user.LastName</a></li>
 }
 

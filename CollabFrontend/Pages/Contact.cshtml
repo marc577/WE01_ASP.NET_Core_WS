@@ -3,17 +3,66 @@
 @{
     ViewData["Title"] = "Contact";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@Model.Message</h3>
-
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+</br>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+    <form class="form-horizontal" method="POST" id="contact-form-input" >
+        <div class="form-group">
+            <label for="firstname" class="col-sm-3 control-label">Firstname</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="firstname" id="firstname-contact" asp-for="user.FirstName" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lastname" class="col-sm-3 control-label">Lastname</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="lastname" id="lastname-contact" asp-for="user.LastName">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" name="email" id="email-contact" asp-for="user.MailAdress">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary btn-block" asp-page-handler="save" id="save_button" disabled >Save Changes</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+    <form class="form-horizontal" method="POST" id="contact-password-input" >
+        <div class="form-group">
+            <label for="password" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" name="password" id="password-contact" required >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="confirm-password" class="col-sm-3 control-label">Confirm Password</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" name="confirm-password" id="confirm-password-contact" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary btn-block" asp-page-handler="changePassword" id="changePassword" disabled>Change Password</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <form class="form-horizontal" method="POST" >
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-default btn-block" asp-page-handler="discard">Discard</button>
+                </div>
+                <div class="col-sm-6" >
+                    <button type="submit" class="btn btn-default btn-block" asp-page-handler="back">Back to index</button>
+                </div>
+            </div>                    
+        </form>
+    </div>
+</div>

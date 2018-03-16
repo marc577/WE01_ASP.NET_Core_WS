@@ -8,15 +8,13 @@ namespace CollabFrontend.Pages
 {
     public class NavbarModel : PageModel
     {
-        public string Message { get; set; }
 
         public NavbarModel():base(){
-             Message = "Your application description page.";
+             
         }
 
         public void OnGet()
-        {
-            Message = "Your application description page.";
+        {  
         }
     }
 }
