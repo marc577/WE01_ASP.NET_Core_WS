@@ -187,9 +187,9 @@
                                                     }
                                                     @if (todoItem.WorkerID == todoList.OwnerID) 
                                                     {
-                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
-                                                    } else {
                                                         <option value="@todoList.OwnerID" selected>@todoList.Owner.FirstName @todoList.Owner.LastName</option>
+                                                    } else {
+                                                        <option value="@todoList.OwnerID">@todoList.Owner.FirstName @todoList.Owner.LastName</option>
                                                     }
                                                     @foreach (var collab in todoList.Collaborators)
                                                     {
