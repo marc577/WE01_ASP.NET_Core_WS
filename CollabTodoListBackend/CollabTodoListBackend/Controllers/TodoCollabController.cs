@@ -31,8 +31,19 @@ namespace CollabTodoListBackend.Controllers
         [HttpGet("{id}", Name = "GetTodoCollabs")]
         public IEnumerable<TodoList> GetAllUserLists(Guid id)
         {
-
             List<TodoList> result = new List<TodoList>();
+            var currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
+            {
+                string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+                if (!id.ToString().Equals(guidstring))
+                {
+                    return result;
+                }
+            }else{
+                return result;
+            }
+
 
             foreach (TodoList list in _context.TodoList)
             {
@@ -101,7 +112,9 @@ namespace CollabTodoListBackend.Controllers
             if(fUser == null){
                 return NotFound();
             }
-
+            if(fUser.Id.Equals(list.OwnerID)){
+                return BadRequest();
+            }
             var currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
             {
@@ -171,7 +184,7 @@ namespace CollabTodoListBackend.Controllers
             if (currentUser.HasClaim(c => c.Type == JwtRegisteredClaimNames.Jti))
             {
                 string guidstring = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
-                if(list.OwnerID.ToString().Equals(guidstring)){
+                if(list.OwnerID.ToString().Equals(guidstring) || user.CollaboratorID.ToString().Equals(guidstring)){
                     list.Collaborators.Remove(collaberator);
                     _context.SaveChanges();
                     return new NoContentResult();
