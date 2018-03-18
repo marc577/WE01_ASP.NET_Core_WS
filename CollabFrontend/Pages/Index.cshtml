@@ -2,7 +2,7 @@
 @model IndexModel
 @using Microsoft.AspNetCore.Http;
 @{
-    ViewData["Title"] = "Collaborated To Do List";
+    ViewData["Title"] = "Collabed ToDo-List";
 }
 
 
@@ -28,6 +28,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="panel-title">@todoList.Name</h3>
+                    @if(todoList.OwnerID == new Guid(Model.currentUserId) && todoList.TodoItems.Count == 0) {
                     <div class="pull-right">
                         <form method="post">
                         <input type="hidden" value="@todoList.Id" name="listId" />
@@ -36,6 +37,7 @@
                         </button>
                         </form>
                     </div>
+                    }
                     
                 </div>
             </div>

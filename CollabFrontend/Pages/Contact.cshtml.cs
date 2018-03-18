@@ -80,7 +80,7 @@ namespace CollabFrontend.Pages
             return RedirectToPage("Index");
         }
 
-        public IActionResult OnPostSave(String password, String email) {
+        public IActionResult OnPostSave(String email) {
             string userID = HttpContext.Session.GetString("user");
             if(userID != null) {
                 Request request = new Request();

@@ -82,9 +82,9 @@ $(function() {
 		}
 
         if (empty) {
-            $('#save_button').attr('disabled', 'disabled'); 
+            $('#createNewListButton').attr('disabled', 'disabled'); 
         } else {
-            $('#save_button').removeAttr('disabled'); 
+            $('#createNewListButton').removeAttr('disabled'); 
         }
     });
 
