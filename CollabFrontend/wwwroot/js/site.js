@@ -38,11 +38,6 @@ $(function() {
 	$('#register-form input').keyup(function() {
 
         var empty = false;
-        $('#register-form input').each(function() {
-            if ($(this).val() == '') {
-                empty = true;
-            }
-        });
 
         if($("#password-register").val().valueOf() == $("#confirm-password").val().valueOf() && $("#password-register").val().valueOf()!=="") {
             empty = false;
@@ -54,6 +49,12 @@ $(function() {
             $("#message").html("");
             empty = true;
         }
+
+        $('#register-form input').each(function() {
+            if ($(this).val() == '') {
+                empty = true;
+            }
+        });
 
         if (empty) {
             $('#register-submit').attr('disabled', 'disabled');
